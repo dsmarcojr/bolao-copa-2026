@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,21 +13,70 @@
             text-align: center;
             padding: 50px;
         }
-        h1 { color: #2c3e50; }
+
+        h1 {
+            color: #2c3e50;
+        }
+
         .container {
             background: white;
-            padding: 20px;
+            padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            max-width: 600px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
             margin: auto;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1a252f;
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
+    <div class="container" id="login-container">
         <h1>🏆 Bolão Copa 2026</h1>
-        <p>Bem-vindo ao sistema de apostas em testes para deploy pelo GitHub Pages.</p>
+        <p>Bem-vindo! Para começar a dar seus palpites, por favor, nos informe o seu nome.</p>
+        <form id="login-form">
+            <input type="text" id="nome-participante" placeholder="Digite seu nome" required>
+            <br>
+            <button type="submit">Entrar e Palpitar</button>
+        </form>
     </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const nome = document.getElementById('nome-participante').value.trim();
+            if (nome) {
+                // Salvar o nome no localStorage para usar na próxima página
+                localStorage.setItem('participante_atual', nome);
+                alert(`Olá, ${nome}! Agora você pode fornecer seus palpites. (Página de jogos a construir...)`);
+                // Futuramente: redirecionar para a tela de jogos e palpites
+                window.location.href = 'palpites.html';
+            }
+        });
+    </script>
 </body>
+
 </html>

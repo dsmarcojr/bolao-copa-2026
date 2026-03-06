@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolão Copa 2026 - Palpites</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 { color: #2c3e50; }
+        .greeting {
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .grupo-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+        }
+        .grupo-titulo {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .jogo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        .jogo:last-child {
+            border-bottom: none;
+        }
+        .equipe {
+            display: flex;
+            align-items: center;
+            width: 35%;
+        }
+        .equipe.visitante {
+            justify-content: flex-end;
+        }
+        .bandeira {
+            width: 30px;
+            height: 20px;
+            margin: 0 10px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+        }
+        .placar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30%;
+        }
+        input[type="number"] {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        .x-separator {
+            font-weight: bold;
+            color: #666;
+        }
+        .btn-salvar {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .btn-salvar:hover {
+            background-color: #2ecc71;
+        }
+        
+        @media (max-width: 600px) {
+            .equipe {
+                flex-direction: column;
+                font-size: 14px;
+                text-align: center;
+            }
+            .equipe.visitante {
+                flex-direction: column-reverse;
+            }
+            .bandeira {
+                margin: 5px 0;
+            }
+            input[type="number"] {
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+                margin: 0 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🏆 Meus Palpites</h1>
+        <div class="greeting" id="saudacao">Carregando participante...</div>
+        <p>Preencha os resultados dos jogos abaixo:</p>
+    </header>
+
+    <div id="lista-jogos">
+        <!-- Os jogos serão carregados aqui via JavaScript -->
+        <p style="text-align: center;">Carregando jogos da Copa...</p>
+    </div>
+
+    <button class="btn-salvar" onclick="salvarPalpites()">Salvar Meus Palpites</button>
+
+    <script>
+        // Base de dados de seleções extraídas do arquivo Excel (Tabelas - Copa do Mundo)
+        const gruposCopa = {
+            "Grupo A": [
+                { nome: "México", bandeira: "https://flagcdn.com/mx.svg" },
+                { nome: "África do Sul", bandeira: "https://flagcdn.com/za.svg" },
+                { nome: "Coréia do Sul", bandeira: "https://flagcdn.com/kr.svg" },
+                { nome: "Repescagem 1", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" }
+            ],
+            "Grupo B": [
+                { nome: "Canadá", bandeira: "https://flagcdn.com/ca.svg" },
+                { nome: "Repescagem 2", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" },
+                { nome: "Catar", bandeira: "https://flagcdn.com/qa.svg" },
+                { nome: "Suíça", bandeira: "https://flagcdn.com/ch.svg" }
+            ],
+            "Grupo C": [
+                { nome: "Brasil", bandeira: "https://flagcdn.com/br.svg" },
+                { nome: "Marrocos", bandeira: "https://flagcdn.com/ma.svg" },
+                { nome: "Haiti", bandeira: "https://flagcdn.com/ht.svg" },
+                { nome: "Escócia", bandeira: "https://flagcdn.com/gb-sct.svg" }
+            ],
+            "Grupo D": [
+                { nome: "Estados Unidos", bandeira: "https://flagcdn.com/us.svg" },
+                { nome: "Paraguai", bandeira: "https://flagcdn.com/py.svg" },
+                { nome: "Austrália", bandeira: "https://flagcdn.com/au.svg" },
+                { nome: "Repescagem 3", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" }
+            ],
+            "Grupo E": [
+                { nome: "Alemanha", bandeira: "https://flagcdn.com/de.svg" },
+                { nome: "Curaçao", bandeira: "https://flagcdn.com/cw.svg" },
+                { nome: "Costa do Marfim", bandeira: "https://flagcdn.com/ci.svg" },
+                { nome: "Equador", bandeira: "https://flagcdn.com/ec.svg" }
+            ],
+            "Grupo F": [
+                { nome: "Holanda", bandeira: "https://flagcdn.com/nl.svg" },
+                { nome: "Japão", bandeira: "https://flagcdn.com/jp.svg" },
+                { nome: "Repescagem 4", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" },
+                { nome: "Tunísia", bandeira: "https://flagcdn.com/tn.svg" }
+            ],
+            "Grupo G": [
+                { nome: "Bélgica", bandeira: "https://flagcdn.com/be.svg" },
+                { nome: "Egito", bandeira: "https://flagcdn.com/eg.svg" },
+                { nome: "Irã", bandeira: "https://flagcdn.com/ir.svg" },
+                { nome: "Nova Zelândia", bandeira: "https://flagcdn.com/nz.svg" }
+            ],
+            "Grupo H": [
+                { nome: "Espanha", bandeira: "https://flagcdn.com/es.svg" },
+                { nome: "Cabo Verde", bandeira: "https://flagcdn.com/cv.svg" },
+                { nome: "Arábia Saudita", bandeira: "https://flagcdn.com/sa.svg" },
+                { nome: "Uruguai", bandeira: "https://flagcdn.com/uy.svg" }
+            ],
+            "Grupo I": [
+                { nome: "França", bandeira: "https://flagcdn.com/fr.svg" },
+                { nome: "Senegal", bandeira: "https://flagcdn.com/sn.svg" },
+                { nome: "Repescagem 5", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" },
+                { nome: "Noruega", bandeira: "https://flagcdn.com/no.svg" }
+            ],
+            "Grupo J": [
+                { nome: "Argentina", bandeira: "https://flagcdn.com/ar.svg" },
+                { nome: "Argélia", bandeira: "https://flagcdn.com/dz.svg" },
+                { nome: "Áustria", bandeira: "https://flagcdn.com/at.svg" },
+                { nome: "Jordânia", bandeira: "https://flagcdn.com/jo.svg" }
+            ],
+            "Grupo K": [
+                { nome: "Portugal", bandeira: "https://flagcdn.com/pt.svg" },
+                { nome: "Repescagem 6", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" },
+                { nome: "Uzbequistão", bandeira: "https://flagcdn.com/uz.svg" },
+                { nome: "Colômbia", bandeira: "https://flagcdn.com/co.svg" }
+            ],
+            "Grupo L": [
+                { nome: "Inglaterra", bandeira: "https://flagcdn.com/gb-eng.svg" },
+                { nome: "Croácia", bandeira: "https://flagcdn.com/hr.svg" },
+                { nome: "Gana", bandeira: "https://flagcdn.com/gh.svg" },
+                { nome: "Panamá", bandeira: "https://flagcdn.com/pa.svg" }
+            ]
+        };
+
+        const jogosCopa = {};
+        let gameId = 1;
+
+        // Gerar jogos automaticamente (todos contra todos no mesmo grupo: 6 jogos por grupo)
+        for (const grupo in gruposCopa) {
+            const t = gruposCopa[grupo];
+            jogosCopa[grupo] = [
+                { id: gameId++, time1: t[0].nome, bandeira1: t[0].bandeira, time2: t[1].nome, bandeira2: t[1].bandeira },
+                { id: gameId++, time1: t[2].nome, bandeira1: t[2].bandeira, time2: t[3].nome, bandeira2: t[3].bandeira },
+                { id: gameId++, time1: t[0].nome, bandeira1: t[0].bandeira, time2: t[2].nome, bandeira2: t[2].bandeira },
+                { id: gameId++, time1: t[1].nome, bandeira1: t[1].bandeira, time2: t[3].nome, bandeira2: t[3].bandeira },
+                { id: gameId++, time1: t[0].nome, bandeira1: t[0].bandeira, time2: t[3].nome, bandeira2: t[3].bandeira },
+                { id: gameId++, time1: t[1].nome, bandeira1: t[1].bandeira, time2: t[2].nome, bandeira2: t[2].bandeira }
+            ];
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const nomeParticipante = localStorage.getItem('participante_atual');
+            
+            if (!nomeParticipante) {
+                alert("Identificação não encontrada. Por favor, digite seu nome primeiro.");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            document.getElementById('saudacao').innerHTML = `Bem-vindo(a), <strong>${nomeParticipante}</strong>!`;
+            renderizarJogos();
+        });
+
+        function renderizarJogos() {
+            const container = document.getElementById('lista-jogos');
+            container.innerHTML = ''; // Limpar "Carregando"
+
+            for (const grupo in jogosCopa) {
+                let grupoHTML = `
+                    <div class="grupo-container">
+                        <h2 class="grupo-titulo">${grupo}</h2>
+                `;
+
+                jogosCopa[grupo].forEach(jogo => {
+                    grupoHTML += `
+                        <div class="jogo">
+                            <div class="equipe">
+                                <span class="nome-time">${jogo.time1}</span>
+                                <img src="${jogo.bandeira1}" alt="Bandeira ${jogo.time1}" class="bandeira">
+                            </div>
+                            
+                            <div class="placar">
+                                <input type="number" min="0" id="jogo-${jogo.id}-time1" placeholder="-">
+                                <span class="x-separator">X</span>
+                                <input type="number" min="0" id="jogo-${jogo.id}-time2" placeholder="-">
+                            </div>
+
+                            <div class="equipe visitante">
+                                <img src="${jogo.bandeira2}" alt="Bandeira ${jogo.time2}" class="bandeira">
+                                <span class="nome-time">${jogo.time2}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                grupoHTML += `</div>`;
+                container.innerHTML += grupoHTML;
+            }
+        }
+
+        function salvarPalpites() {
+            const palpites = {};
+            
+            // Coletar todos os inputs preenchidos
+            for (const grupo in jogosCopa) {
+                jogosCopa[grupo].forEach(jogo => {
+                    const gol1 = document.getElementById(`jogo-${jogo.id}-time1`).value;
+                    const gol2 = document.getElementById(`jogo-${jogo.id}-time2`).value;
+                    
+                    if(gol1 !== "" && gol2 !== "") {
+                        palpites[jogo.id] = {
+                            placar1: parseInt(gol1),
+                            placar2: parseInt(gol2)
+                        };
+                    }
+                });
+            }
+
+            console.log("Palpites a serem salvos:", palpites);
+            alert("Palpites simulados salvos com sucesso na memória do navegador! (A integração com o Python virá em breve)");
+        }
+    </script>
+</body>
+</html>
