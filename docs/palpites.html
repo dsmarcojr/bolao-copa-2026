@@ -60,27 +60,38 @@
         .equipe {
             display: flex;
             align-items: center;
-            width: 35%;
+            width: 40%;
+            gap: 10px;
         }
 
         .equipe.visitante {
             justify-content: flex-end;
+            text-align: right;
+        }
+
+        .nome-time {
+            flex: 1;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .bandeira {
-            width: 30px;
-            height: 20px;
-            margin: 0 10px;
+            width: 32px;
+            height: 22px;
+            min-width: 32px;
             object-fit: cover;
-            border: 1px solid #ccc;
-            border-radius: 2px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
         .placar {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 30%;
+            width: 20%;
         }
 
         input[type="number"] {
@@ -147,6 +158,11 @@
         <h1>🏆 Meus Palpites</h1>
         <div class="greeting" id="saudacao">Carregando participante...</div>
         <p>Preencha os resultados dos jogos abaixo:</p>
+        <div style="margin-top: 15px;">
+            <a href="index.html" style="text-decoration: none; color: #3e7454; font-weight: bold; margin: 0 10px;">Início</a>
+            <a href="resultados.html" style="text-decoration: none; color: #3e7454; font-weight: bold; margin: 0 10px;">⚽ Resultados</a>
+            <a href="classificacao.html" style="text-decoration: none; color: #3e7454; font-weight: bold; margin: 0 10px;">🏆 Classificação</a>
+        </div>
     </header>
 
     <div id="lista-jogos">

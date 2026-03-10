@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolão Copa 2026 - Resultados Oficiais</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #3e7454;
+        }
+
+        .dropdown-menu {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .dropdown-menu a {
+            text-decoration: none;
+            color: #3e7454;
+            font-weight: bold;
+            margin: 0 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #e2ede6;
+        }
+
+        .grupo-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+        }
+
+        .grupo-titulo {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #3e7454;
+        }
+
+        .jogo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .jogo:last-child {
+            border-bottom: none;
+        }
+
+        .equipe {
+            display: flex;
+            align-items: center;
+            width: 40%;
+            gap: 10px;
+        }
+
+        .equipe.visitante {
+            justify-content: flex-end;
+            text-align: right;
+        }
+
+        .nome-time {
+            flex: 1;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bandeira {
+            width: 32px;
+            height: 22px;
+            min-width: 32px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .placar-oficial {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20%;
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .gol-box {
+            background: #e2ede6;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin: 0 10px;
+            border: 1px solid #3e7454;
+        }
+
+        .x-separator {
+            font-weight: bold;
+            color: #666;
+            font-size: 18px;
+        }
+
+        .status-badge {
+            font-size: 0.7em;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-left: 10px;
+            text-transform: uppercase;
+        }
+
+        .status-encerrado {
+            background-color: #eee;
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            .equipe {
+                flex-direction: column;
+                font-size: 14px;
+                text-align: center;
+            }
+
+            .equipe.visitante {
+                flex-direction: column-reverse;
+            }
+
+            .bandeira {
+                margin: 5px 0;
+            }
+
+            .gol-box {
+                width: 35px;
+                height: 35px;
+                font-size: 18px;
+                margin: 0 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>⚽ Resultados Oficiais</h1>
+        <div class="dropdown-menu">
+            <a href="index.html">Início</a>
+            <a href="palpites.html">Meus Palpites</a>
+            <a href="classificacao.html">Classificação</a>
+        </div>
+        <p>Acompanhe os resultados reais da Copa para conferir seus pontos.</p>
+    </header>
+
+    <div id="lista-resultados">
+        <!-- Os resultados serão carregados aqui via JavaScript -->
+        <p style="text-align: center;">Carregando resultados...</p>
+    </div>
+
+    <script>
+        const gruposCopa = {
+            "Grupo A": [
+                { nome: "México", bandeira: "https://flagcdn.com/mx.svg" },
+                { nome: "África do Sul", bandeira: "https://flagcdn.com/za.svg" },
+                { nome: "Coréia do Sul", bandeira: "https://flagcdn.com/kr.svg" },
+                { nome: "Repescagem 1", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" }
+            ],
+            // ... outros grupos seriam adicionados aqui para paridade total
+        };
+
+        // Mock de resultados oficiais para demonstração
+        const resultadosOficiais = {
+            1: { placar1: 2, placar2: 1, status: "Encerrado" },
+            2: { placar1: 0, placar2: 0, status: "Encerrado" },
+            3: { placar1: 1, placar2: 3, status: "Encerrado" },
+            4: { placar1: null, placar2: null, status: "A realizar" }
+        };
+
+        const jogosCopa = {};
+        let gameId = 1;
+
+        // Gerar estrutura de jogos (apenas Grupo A para exemplo, seguindo o padrão do palpites.html)
+        for (const grupo in gruposCopa) {
+            const t = gruposCopa[grupo];
+            jogosCopa[grupo] = [
+                { id: gameId++, time1: t[0].nome, bandeira1: t[0].bandeira, time2: t[1].nome, bandeira2: t[1].bandeira },
+                { id: gameId++, time1: t[2].nome, bandeira1: t[2].bandeira, time2: t[3].nome, bandeira2: t[3].bandeira },
+                { id: gameId++, time1: t[0].nome, bandeira1: t[0].bandeira, time2: t[2].nome, bandeira2: t[2].bandeira },
+                { id: gameId++, time1: t[1].nome, bandeira1: t[1].bandeira, time2: t[3].nome, bandeira2: t[3].bandeira },
+            ];
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderizarResultados();
+        });
+
+        function renderizarResultados() {
+            const container = document.getElementById('lista-resultados');
+            container.innerHTML = '';
+
+            for (const grupo in jogosCopa) {
+                let grupoHTML = `
+                    <div class="grupo-container">
+                        <h2 class="grupo-titulo">${grupo}</h2>
+                `;
+
+                jogosCopa[grupo].forEach(jogo => {
+                    const res = resultadosOficiais[jogo.id] || { placar1: "-", placar2: "-", status: "Agendado" };
+                    
+                    grupoHTML += `
+                        <div class="jogo">
+                            <div class="equipe">
+                                <span class="nome-time">${jogo.time1}</span>
+                                <img src="${jogo.bandeira1}" alt="Bandeira ${jogo.time1}" class="bandeira">
+                            </div>
+                            
+                            <div class="placar-oficial">
+                                <div class="gol-box">${res.placar1 !== null ? res.placar1 : "-"}</div>
+                                <span class="x-separator">X</span>
+                                <div class="gol-box">${res.placar2 !== null ? res.placar2 : "-"}</div>
+                            </div>
+
+                            <div class="equipe visitante">
+                                <img src="${jogo.bandeira2}" alt="Bandeira ${jogo.time2}" class="bandeira">
+                                <span class="nome-time">${jogo.time2}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                grupoHTML += `</div>`;
+                container.innerHTML += grupoHTML;
+            }
+        }
+    </script>
+</body>
+
+</html>
