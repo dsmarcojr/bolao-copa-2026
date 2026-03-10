@@ -15,7 +15,7 @@
         }
 
         h1 {
-            color: #2c3e50;
+            color: #3e7454;
         }
 
         .container {
@@ -36,8 +36,17 @@
             font-size: 16px;
         }
 
+        input[type="password"] {
+            width: 80%;
+            padding: 10px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
         button {
-            background-color: #2c3e50;
+            background-color: #3e7454;
             color: white;
             border: none;
             padding: 12px 24px;
@@ -48,7 +57,7 @@
         }
 
         button:hover {
-            background-color: #1a252f;
+            background-color: #5fb384;
         }
     </style>
 </head>
@@ -56,12 +65,18 @@
 <body>
     <div class="container" id="login-container">
         <h1>🏆 Bolão Copa 2026</h1>
-        <p>Bem-vindo! Para começar a dar seus palpites, por favor, nos informe o seu nome.</p>
+        <p>Para começar a dar seus palpites, por favor, insira seu CPF e senha.</p>
         <form id="login-form">
-            <input type="text" id="nome-participante" placeholder="Digite seu nome" required>
+            <input type="text" id="nome-participante" placeholder="Digite seu usuário" required>
+            <input type="password" id="senha" placeholder="Digite sua senha" required>
             <br>
-            <button type="submit">Entrar e Palpitar</button>
+            <button type="submit">Entrar</button>
         </form>
+    </div>
+
+    <div class="classificacao" id="classificacao-container">
+        <h1>Veja a classificação geral!</h1>
+        <a href="classificacao.html"><button type="submit">Classificação Geral</button></a>
     </div>
 
     <script>
@@ -71,8 +86,7 @@
             if (nome) {
                 // Salvar o nome no localStorage para usar na próxima página
                 localStorage.setItem('participante_atual', nome);
-                alert(`Olá, ${nome}! Agora você pode fornecer seus palpites. (Página de jogos a construir...)`);
-                // Futuramente: redirecionar para a tela de jogos e palpites
+                alert(`Olá, ${nome}! O sistema de banco de dados e login já está pronto no motor.py.`);
                 window.location.href = 'palpites.html';
             }
         });
