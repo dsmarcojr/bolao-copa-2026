@@ -4,53 +4,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolão Copa 2026 - Palpites</title>
+    <title>Bolão Copa 2026 - Registrar Palpites</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-light: #60ad5e;
+            --secondary: #1b5e20;
+            --bg: #f0f4f0;
+            --white: #ffffff;
+            --text: #333333;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(46, 125, 50, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(46, 125, 50, 0.05) 0px, transparent 50%);
+            color: var(--text);
             margin: 0;
             padding: 20px;
+            min-height: 100vh;
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            padding-top: 20px;
         }
 
-        h1 {
-            color: #3e7454;
+        header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 5px;
         }
 
         .greeting {
-            font-size: 1.2em;
+            font-size: 1.1rem;
             color: #555;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
-        .grupo-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            text-decoration: none;
+            background: var(--white);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: 2px solid var(--primary);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            border-color: #c0392b;
+            color: #c0392b;
+        }
+
+        .btn-logout:hover {
+            background: #c0392b;
+            color: white;
+        }
+
+        .grupo-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            max-width: 850px;
             margin: 0 auto 30px auto;
+            border: 1px solid rgba(0,0,0,0.03);
         }
 
         .grupo-titulo {
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            color: #3e7454;
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            color: var(--secondary);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .jogo {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px dashed #eee;
+            padding: 20px 0;
+            border-bottom: 1px solid #f2f2f2;
         }
 
         .jogo:last-child {
@@ -61,93 +119,119 @@
             display: flex;
             align-items: center;
             width: 40%;
-            gap: 10px;
+            gap: 15px;
         }
 
         .equipe.visitante {
-            justify-content: flex-end;
+            flex-direction: row-reverse;
             text-align: right;
         }
 
         .nome-time {
             flex: 1;
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-weight: 600;
+            font-size: 1.1rem;
         }
 
         .bandeira {
-            width: 32px;
-            height: 22px;
-            min-width: 32px;
+            width: 45px;
+            height: 30px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             object-fit: cover;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
         }
 
-        .placar {
+        .placar-inputs {
             display: flex;
             align-items: center;
             justify-content: center;
             width: 20%;
+            gap: 10px;
         }
 
         input[type="number"] {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             text-align: center;
-            font-size: 18px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin: 0 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.3s;
+            background: #fafafa;
         }
 
-        .x-separator {
-            font-weight: bold;
-            color: #666;
+        input[type="number"]:focus {
+            border-color: var(--primary-light);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(96, 173, 94, 0.1);
         }
 
-        .btn-salvar {
-            display: block;
-            width: 200px;
-            margin: 30px auto;
-            background-color: #27ae60;
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .x-sep {
+            font-weight: 600;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .btn-salvar-fixo {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--primary);
             color: white;
             border: none;
-            padding: 15px;
-            border-radius: 5px;
-            font-size: 18px;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            text-align: center;
-            transition: background-color 0.3s;
+            box-shadow: 0 10px 20px rgba(46, 125, 50, 0.3);
+            transition: all 0.3s;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .btn-salvar:hover {
-            background-color: #2ecc71;
+        .btn-salvar-fixo:hover {
+            transform: scale(1.05);
+            background-color: var(--secondary);
         }
 
         @media (max-width: 600px) {
             .equipe {
                 flex-direction: column;
-                font-size: 14px;
+                gap: 5px;
                 text-align: center;
             }
-
             .equipe.visitante {
-                flex-direction: column-reverse;
+                flex-direction: column;
             }
-
+            .nome-time {
+                font-size: 0.9rem;
+            }
             .bandeira {
-                margin: 5px 0;
+                width: 35px;
+                height: 25px;
             }
-
             input[type="number"] {
-                width: 30px;
-                height: 30px;
-                font-size: 16px;
-                margin: 0 5px;
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            .btn-salvar-fixo {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 24px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -155,35 +239,42 @@
 
 <body>
     <header>
-        <h1>🏆 Meus Palpites</h1>
-        <div class="greeting" id="saudacao">Carregando participante...</div>
-        <p>Preencha os resultados dos jogos abaixo:</p>
-        <div style="margin-top: 15px;">
-            <a href="index.html" style="text-decoration: none; color: #3e7454; font-weight: bold; margin: 0 10px;">Início</a>
-            <a href="resultados.html" style="text-decoration: none; color: #3e7454; font-weight: bold; margin: 0 10px;">⚽ Resultados</a>
-            <a href="classificacao.html" style="text-decoration: none; color: #3e7454; font-weight: bold; margin: 0 10px;">🏆 Classificação</a>
+        <h1>⚽ Meus Palpites</h1>
+        <div class="greeting" id="saudacao">Bem-vindo(a), jogador!</div>
+        
+        <div class="nav-container">
+            <a href="index.html" class="nav-btn">Início</a>
+            <a href="classificacao.html" class="nav-btn">🏆 Classificação</a>
+            <a href="resultados.html" class="nav-btn">⚽ Resultados</a>
+            <a href="#" class="nav-btn btn-logout" id="logout-link">Sair</a>
         </div>
     </header>
 
     <div id="lista-jogos">
-        <!-- Os jogos serão carregados aqui via JavaScript -->
-        <p style="text-align: center;">Carregando jogos da Copa...</p>
+        <p style="text-align: center; color: #666;">Preparando o campo...</p>
     </div>
 
-    <button class="btn-salvar" onclick="salvarPalpites()">Salvar Meus Palpites</button>
+    <button id="btn-save" class="btn-salvar-fixo" onclick="salvarPalpites()">
+        💾 Salvar Palpites
+    </button>
 
     <script>
-        // Base de dados de seleções extraídas do arquivo Excel (Tabelas - Copa do Mundo)
+        const usuarioLogado = localStorage.getItem('usuario_logado');
+        // Simulação de trava diária
+        const dataHoje = new Date().toISOString().split('T')[0];
+        let palpitesJaRealizadosHoje = localStorage.getItem(`palpites_realizados_${usuarioLogado}_${dataHoje}`);
+
+        // Seleções Copa 2026
         const gruposCopa = {
             "Grupo A": [
                 { nome: "México", bandeira: "https://flagcdn.com/mx.svg" },
                 { nome: "África do Sul", bandeira: "https://flagcdn.com/za.svg" },
                 { nome: "Coréia do Sul", bandeira: "https://flagcdn.com/kr.svg" },
-                { nome: "Repescagem 1", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" }
+                { nome: "Noruega", bandeira: "https://flagcdn.com/no.svg" }
             ],
             "Grupo B": [
                 { nome: "Canadá", bandeira: "https://flagcdn.com/ca.svg" },
-                { nome: "Repescagem 2", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" },
+                { nome: "Eslovênia", bandeira: "https://flagcdn.com/si.svg" },
                 { nome: "Catar", bandeira: "https://flagcdn.com/qa.svg" },
                 { nome: "Suíça", bandeira: "https://flagcdn.com/ch.svg" }
             ],
@@ -192,151 +283,93 @@
                 { nome: "Marrocos", bandeira: "https://flagcdn.com/ma.svg" },
                 { nome: "Haiti", bandeira: "https://flagcdn.com/ht.svg" },
                 { nome: "Escócia", bandeira: "https://flagcdn.com/gb-sct.svg" }
-            ],
-            "Grupo D": [
-                { nome: "Estados Unidos", bandeira: "https://flagcdn.com/us.svg" },
-                { nome: "Paraguai", bandeira: "https://flagcdn.com/py.svg" },
-                { nome: "Austrália", bandeira: "https://flagcdn.com/au.svg" },
-                { nome: "Repescagem 3", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" }
-            ],
-            "Grupo E": [
-                { nome: "Alemanha", bandeira: "https://flagcdn.com/de.svg" },
-                { nome: "Curaçao", bandeira: "https://flagcdn.com/cw.svg" },
-                { nome: "Costa do Marfim", bandeira: "https://flagcdn.com/ci.svg" },
-                { nome: "Equador", bandeira: "https://flagcdn.com/ec.svg" }
-            ],
-            "Grupo F": [
-                { nome: "Holanda", bandeira: "https://flagcdn.com/nl.svg" },
-                { nome: "Japão", bandeira: "https://flagcdn.com/jp.svg" },
-                { nome: "Repescagem 4", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" },
-                { nome: "Tunísia", bandeira: "https://flagcdn.com/tn.svg" }
-            ],
-            "Grupo G": [
-                { nome: "Bélgica", bandeira: "https://flagcdn.com/be.svg" },
-                { nome: "Egito", bandeira: "https://flagcdn.com/eg.svg" },
-                { nome: "Irã", bandeira: "https://flagcdn.com/ir.svg" },
-                { nome: "Nova Zelândia", bandeira: "https://flagcdn.com/nz.svg" }
-            ],
-            "Grupo H": [
-                { nome: "Espanha", bandeira: "https://flagcdn.com/es.svg" },
-                { nome: "Cabo Verde", bandeira: "https://flagcdn.com/cv.svg" },
-                { nome: "Arábia Saudita", bandeira: "https://flagcdn.com/sa.svg" },
-                { nome: "Uruguai", bandeira: "https://flagcdn.com/uy.svg" }
-            ],
-            "Grupo I": [
-                { nome: "França", bandeira: "https://flagcdn.com/fr.svg" },
-                { nome: "Senegal", bandeira: "https://flagcdn.com/sn.svg" },
-                { nome: "Repescagem 5", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" },
-                { nome: "Noruega", bandeira: "https://flagcdn.com/no.svg" }
-            ],
-            "Grupo J": [
-                { nome: "Argentina", bandeira: "https://flagcdn.com/ar.svg" },
-                { nome: "Argélia", bandeira: "https://flagcdn.com/dz.svg" },
-                { nome: "Áustria", bandeira: "https://flagcdn.com/at.svg" },
-                { nome: "Jordânia", bandeira: "https://flagcdn.com/jo.svg" }
-            ],
-            "Grupo K": [
-                { nome: "Portugal", bandeira: "https://flagcdn.com/pt.svg" },
-                { nome: "Repescagem 6", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" },
-                { nome: "Uzbequistão", bandeira: "https://flagcdn.com/uz.svg" },
-                { nome: "Colômbia", bandeira: "https://flagcdn.com/co.svg" }
-            ],
-            "Grupo L": [
-                { nome: "Inglaterra", bandeira: "https://flagcdn.com/gb-eng.svg" },
-                { nome: "Croácia", bandeira: "https://flagcdn.com/hr.svg" },
-                { nome: "Gana", bandeira: "https://flagcdn.com/gh.svg" },
-                { nome: "Panamá", bandeira: "https://flagcdn.com/pa.svg" }
             ]
         };
 
-        const jogosCopa = {};
-        let gameId = 1;
-
-        // Gerar jogos automaticamente (todos contra todos no mesmo grupo: 6 jogos por grupo)
-        for (const grupo in gruposCopa) {
-            const t = gruposCopa[grupo];
-            jogosCopa[grupo] = [
-                { id: gameId++, time1: t[0].nome, bandeira1: t[0].bandeira, time2: t[1].nome, bandeira2: t[1].bandeira },
-                { id: gameId++, time1: t[2].nome, bandeira1: t[2].bandeira, time2: t[3].nome, bandeira2: t[3].bandeira },
-                { id: gameId++, time1: t[0].nome, bandeira1: t[0].bandeira, time2: t[2].nome, bandeira2: t[2].bandeira },
-                { id: gameId++, time1: t[1].nome, bandeira1: t[1].bandeira, time2: t[3].nome, bandeira2: t[3].bandeira },
-                { id: gameId++, time1: t[0].nome, bandeira1: t[0].bandeira, time2: t[3].nome, bandeira2: t[3].bandeira },
-                { id: gameId++, time1: t[1].nome, bandeira1: t[1].bandeira, time2: t[2].nome, bandeira2: t[2].bandeira }
-            ];
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            const nomeParticipante = localStorage.getItem('participante_atual');
-
-            if (!nomeParticipante) {
-                alert("Identificação não encontrada. Por favor, digite seu nome primeiro.");
+            if (!usuarioLogado) {
+                alert("Identificação necessária para acessar esta página.");
                 window.location.href = 'index.html';
                 return;
             }
 
-            document.getElementById('saudacao').innerHTML = `Bem-vindo(a), <strong>${nomeParticipante}</strong>!`;
+            document.getElementById('saudacao').innerHTML = `Logado como: <strong>${usuarioLogado}</strong>`;
             renderizarJogos();
+
+            if (palpitesJaRealizadosHoje) {
+                travarInputs();
+            }
+
+            document.getElementById('logout-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('usuario_logado');
+                window.location.href = 'index.html';
+            });
         });
 
         function renderizarJogos() {
             const container = document.getElementById('lista-jogos');
-            container.innerHTML = ''; // Limpar "Carregando"
+            container.innerHTML = ''; 
 
-            for (const grupo in jogosCopa) {
+            let gameCounter = 1;
+            for (const grupo in gruposCopa) {
+                const times = gruposCopa[grupo];
                 let grupoHTML = `
-                    <div class="grupo-container">
-                        <h2 class="grupo-titulo">${grupo}</h2>
+                    <div class="grupo-card">
+                        <div class="grupo-titulo">
+                            <span>${grupo}</span>
+                            <small style="font-size: 0.8rem; opacity: 0.6; font-weight: normal;">Fase de Grupos</small>
+                        </div>
                 `;
 
-                jogosCopa[grupo].forEach(jogo => {
+                for(let i=0; i<2; i++) {
+                    const t1 = times[i*2];
+                    const t2 = times[i*2 + 1];
                     grupoHTML += `
                         <div class="jogo">
                             <div class="equipe">
-                                <span class="nome-time">${jogo.time1}</span>
-                                <img src="${jogo.bandeira1}" alt="Bandeira ${jogo.time1}" class="bandeira">
+                                <span class="nome-time">${t1.nome}</span>
+                                <img src="${t1.bandeira}" alt="${t1.nome}" class="bandeira">
                             </div>
-                            
-                            <div class="placar">
-                                <input type="number" min="0" id="jogo-${jogo.id}-time1" placeholder="-">
-                                <span class="x-separator">X</span>
-                                <input type="number" min="0" id="jogo-${jogo.id}-time2" placeholder="-">
+                            <div class="placar-inputs">
+                                <input type="number" min="0" placeholder="0" id="j-${gameCounter}-1">
+                                <span class="x-sep">X</span>
+                                <input type="number" min="0" placeholder="0" id="j-${gameCounter}-2">
                             </div>
-
                             <div class="equipe visitante">
-                                <img src="${jogo.bandeira2}" alt="Bandeira ${jogo.time2}" class="bandeira">
-                                <span class="nome-time">${jogo.time2}</span>
+                                <span class="nome-time">${t2.nome}</span>
+                                <img src="${t2.bandeira}" alt="${t2.nome}" class="bandeira">
                             </div>
                         </div>
                     `;
-                });
-
+                    gameCounter++;
+                }
                 grupoHTML += `</div>`;
                 container.innerHTML += grupoHTML;
             }
         }
 
+        function travarInputs() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.disabled = true;
+                input.style.backgroundColor = '#f8f9fa';
+                input.style.opacity = '0.7';
+            });
+            const btn = document.getElementById('btn-save');
+            if (btn) btn.style.display = 'none';
+
+            const warning = document.createElement('div');
+            warning.style.cssText = 'background: #fff3cd; color: #856404; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: center; font-weight: 600; border: 1px solid #ffeeba;';
+            warning.innerHTML = '🔒 Você já enviou seus palpites hoje. Os campos estão em modo de apenas visualização.';
+            document.getElementById('lista-jogos').prepend(warning);
+        }
+
         function salvarPalpites() {
-            const palpites = {};
-
-            // Coletar todos os inputs preenchidos
-            for (const grupo in jogosCopa) {
-                jogosCopa[grupo].forEach(jogo => {
-                    const gol1 = document.getElementById(`jogo-${jogo.id}-time1`).value;
-                    const gol2 = document.getElementById(`jogo-${jogo.id}-time2`).value;
-
-                    if (gol1 !== "" && gol2 !== "") {
-                        palpites[jogo.id] = {
-                            placar1: parseInt(gol1),
-                            placar2: parseInt(gol2)
-                        };
-                    }
-                });
-            }
-
-            console.log("Palpites a serem salvos:", palpites);
-            alert("Palpites simulados salvos com sucesso na memória do navegador! (A integração com o Python virá em breve)");
+            localStorage.setItem(`palpites_realizados_${usuarioLogado}_${dataHoje}`, "true");
+            alert("Sucesso! Seus palpites foram registrados e agora o sistema está em modo de apenas visualização por hoje.");
+            travarInputs();
         }
     </script>
 </body>
-
-</html>
+</html>

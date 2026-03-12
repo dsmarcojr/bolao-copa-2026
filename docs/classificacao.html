@@ -4,61 +4,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolão Copa 2026 - Classificação</title>
+    <title>Bolão Copa 2026 - Classificação Geral</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-light: #60ad5e;
+            --secondary: #1b5e20;
+            --bg: #f0f4f0;
+            --white: #ffffff;
+            --text: #333333;
+            --gold: #f1c40f;
+            --silver: #bdc3c7;
+            --bronze: #cd7f32;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(46, 125, 50, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(46, 125, 50, 0.05) 0px, transparent 50%);
+            color: var(--text);
             margin: 0;
             padding: 20px;
+            min-height: 100vh;
         }
 
         header {
             text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
             margin-bottom: 30px;
         }
 
-        h1 {
-            color: #3e7454;
-        }
-
-        .dropdown-menu {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .dropdown-menu a {
+        .nav-btn {
             text-decoration: none;
-            color: #3e7454;
-            font-weight: bold;
-            margin: 0 10px;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            background: var(--white);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: 2px solid var(--primary);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
-        .dropdown-menu a:hover {
-            background-color: #e2ede6;
+        .nav-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
         }
 
-        .classificacao-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: 0 auto 30px auto;
+        .nav-btn.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .nav-btn.special {
+            background: var(--secondary);
+            color: var(--white);
+            border-color: var(--secondary);
+        }
+
+        .nav-btn.login-btn {
+            background: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
+        }
+
+        .main-container {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            max-width: 900px;
+            margin: auto;
+            border: 1px solid rgba(0,0,0,0.03);
         }
 
         .classificacao-titulo {
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            color: #3e7454;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .classificacao-titulo h2 {
+            margin: 0;
+            color: var(--secondary);
+            font-size: 1.5rem;
         }
 
         .tabela-classificacao {
@@ -69,68 +122,83 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px dashed #eee;
+            padding: 18px 10px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+            border-radius: 10px;
         }
 
-        .usuario-row:last-child {
-            border-bottom: none;
+        .usuario-row:hover {
+            background-color: #f9faf9;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
             flex: 1;
         }
 
         .posicao {
-            font-weight: bold;
-            width: 40px;
-            font-size: 1.1em;
-            color: #3e7454;
+            font-weight: 600;
+            width: 45px;
+            font-size: 1.2rem;
+            color: var(--primary);
         }
 
         .avatar {
-            width: 40px;
-            height: 40px;
-            background-color: #e2ede6;
+            width: 45px;
+            height: 45px;
+            background-color: var(--bg);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            color: #3e7454;
-            border: 2px solid #3e7454;
+            font-weight: 600;
+            color: var(--primary);
+            border: 2px solid var(--primary-light);
+            font-size: 0.9rem;
         }
 
         .nome-usuario {
-            font-size: 1.1em;
-            font-weight: 500;
+            font-size: 1.1rem;
+            font-weight: 400;
         }
 
         .pontuacao {
-            font-weight: bold;
-            font-size: 1.2em;
-            color: #27ae60;
-            width: 80px;
+            font-weight: 600;
+            font-size: 1.4rem;
+            color: var(--primary);
             text-align: right;
+            min-width: 100px;
         }
 
-        .status-top {
-            color: #f1c40f;
-            margin-left: 5px;
+        .pts-label {
+            font-size: 0.7rem;
+            color: #888;
+            font-weight: 400;
+            margin-left: 4px;
         }
 
+        .status-badge {
+            font-size: 1.2rem;
+            margin-left: 8px;
+        }
+
+        /* Responsive Improvements */
         @media (max-width: 600px) {
-            .classificacao-container {
-                padding: 15px;
+            .main-container {
+                padding: 20px;
             }
             .nome-usuario {
-                font-size: 1em;
+                font-size: 1rem;
             }
             .posicao {
-                width: 30px;
+                width: 35px;
+                font-size: 1rem;
+            }
+            .nav-container {
+                gap: 10px;
             }
         }
     </style>
@@ -139,70 +207,145 @@
 <body>
     <header>
         <h1>🏆 Classificação Geral</h1>
-        <div class="dropdown-menu">
-            <a href="index.html">Início</a>
-            <a href="palpites.html">Meus Palpites</a>
-            <a href="resultados.html">Resultados</a>
+        <div class="nav-container" id="nav-actions">
+            <!-- Botões dinâmicos via JS -->
+            <a href="index.html" class="nav-btn">Início</a>
+            <a href="resultados.html" class="nav-btn">Resultados</a>
         </div>
     </header>
 
-    <div class="classificacao-container">
+    <div class="main-container">
         <div class="classificacao-titulo">
-            <span>Ranking dos Participantes</span>
-            <small id="atualizacao-info" style="font-weight: normal; color: #888;">Atualizado agora</small>
+            <h2>Ranking Copa 2026</h2>
+            <div id="user-status-msg" style="color: #666; font-size: 0.9rem;"></div>
         </div>
 
         <div id="tabela-corpo" class="tabela-classificacao">
-            <!-- Os usuários serão carregados aqui via JavaScript -->
-            <p style="text-align: center;">Carregando classificação...</p>
+            <p style="text-align: center; color: #666;">Carregando ranking...</p>
+        </div>
+    </div>
+
+    <!-- Seção de Regras de Pontuação -->
+    <div class="main-container" style="margin-top: 30px; padding: 30px;">
+        <h3 style="color: var(--secondary); border-bottom: 2px solid var(--bg); padding-bottom: 10px; margin-bottom: 20px;">📜 Regras de Pontuação (Acumulativas)</h3>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">As pontuações são somadas para cada acerto no seu palpite:</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div style="background: #fdfdfd; padding: 15px; border-radius: 12px; border-left: 4px solid #2ecc71;">
+                <div style="font-weight: 600; color: #27ae60; font-size: 1.1rem;">10 Pontos</div>
+                <div style="font-size: 0.9rem; color: #666;">Placar em cheio (Soberano)</div>
+            </div>
+            <div style="background: #fdfdfd; padding: 15px; border-radius: 12px; border-left: 4px solid #3498db;">
+                <div style="font-weight: 600; color: #2980b9; font-size: 1.1rem;">+5 Pontos</div>
+                <div style="font-size: 0.9rem; color: #666;">Acerto do vencedor ou empate</div>
+            </div>
+            <div style="background: #fdfdfd; padding: 15px; border-radius: 12px; border-left: 4px solid #95a5a6;">
+                <div style="font-weight: 600; color: #7f8c8d; font-size: 1.1rem;">+2 Pontos</div>
+                <div style="font-size: 0.9rem; color: #666;">Cada acerto de gols (Mandante ou Visitante)</div>
+            </div>
+            <div style="background: #fdfdfd; padding: 15px; border-radius: 12px; border-left: 4px solid #f39c12;">
+                <div style="font-weight: 600; color: #d35400; font-size: 1.1rem;">+3 Pontos</div>
+                <div style="font-size: 0.9rem; color: #666;">Placar invertido (Ex: Palpite 1x2, Real 2x1)</div>
+            </div>
+        </div>
+        <div style="margin-top: 20px; padding: 15px; background: #f0f7f2; border-radius: 10px; font-size: 0.9rem; color: #444;">
+            <strong>Exemplo:</strong> Se o jogo for 2x1 e você palpitou 3x1, você ganha <strong>7 pontos</strong> (5 pelo vencedor + 2 pelos gols do visitante).
         </div>
     </div>
 
     <script>
-        // Mock data para simular a classificação
+        const usuarioLogado = localStorage.getItem('usuario_logado');
+
+        // Mock data atualizado com os usuários solicitados e critérios de desempate ocultos
         const usuariosClassificacao = [
-            { nome: "José Maria", pontos: 45, medalha: "🥇" },
-            { nome: "Ana Silva", pontos: 42, medalha: "🥈" },
-            { nome: "Carlos Lima", pontos: 38, medalha: "🥉" },
-            { nome: "Beatriz Rocha", pontos: 35, medalha: "" },
-            { nome: "Paulo Souza", pontos: 32, medalha: "" },
-            { nome: "Mariana Costa", pontos: 30, medalha: "" },
-            { nome: "Ricardo Alves", pontos: 28, medalha: "" },
-            { nome: "Fernanda Dias", pontos: 25, medalha: "" }
+            { nome: "Marco Antonio", pontos: 52, cheios: 4, gols: 12, invertidos: 2 },
+            { nome: "Ana Silva", pontos: 52, cheios: 3, gols: 15, invertidos: 1 },
+            { nome: "Leonardo Pedro", pontos: 48, cheios: 2, gols: 18, invertidos: 5 },
+            { nome: "José Maria", pontos: 48, cheios: 2, gols: 14, invertidos: 3 },
+            { nome: "Beatriz Rocha", pontos: 45, cheios: 1, gols: 20, invertidos: 0 },
+            { nome: "Carlos Lima", pontos: 42, cheios: 3, gols: 8, invertidos: 4 },
+            { nome: "Mariana Costa", pontos: 42, cheios: 1, gols: 10, invertidos: 2 },
+            { nome: "Ricardo Alves", pontos: 35, cheios: 0, gols: 12, invertidos: 1 }
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
-             renderizarClassificacao();
+            configurarBotoes();
+            renderizarClassificacao();
         });
 
+        function configurarBotoes() {
+            const nav = id('nav-actions');
+            const statusMsg = id('user-status-msg');
+
+            if (usuarioLogado) {
+                statusMsg.innerHTML = `Olá, <strong>${usuarioLogado}</strong>!`;
+                
+                const btnPalpitesDia = document.createElement('a');
+                btnPalpitesDia.href = 'palpites.html#hoje';
+                btnPalpitesDia.className = 'nav-btn special';
+                btnPalpitesDia.innerHTML = '📅 Ver palpites de hoje';
+                nav.appendChild(btnPalpitesDia);
+
+                const btnMeusPalpites = document.createElement('a');
+                btnMeusPalpites.href = 'palpites.html';
+                btnMeusPalpites.className = 'nav-btn';
+                btnMeusPalpites.innerHTML = '📝 Meus Palpites';
+                nav.appendChild(btnMeusPalpites);
+
+            } else {
+                statusMsg.textContent = 'Faça login para ver seus palpites.';
+                
+                const btnLogin = document.createElement('a');
+                btnLogin.href = 'index.html';
+                btnLogin.className = 'nav-btn login-btn';
+                btnLogin.innerHTML = '🔑 Entrar / Registrar';
+                nav.appendChild(btnLogin);
+            }
+        }
+
         function renderizarClassificacao() {
-            const container = document.getElementById('tabela-corpo');
+            const container = id('tabela-corpo');
             container.innerHTML = '';
 
-            // Ordenar por pontos decrescente
-            usuariosClassificacao.sort((a, b) => b.pontos - a.pontos);
+            // Lógica de Ordenação com critérios de desempate (Ocultos):
+            // 1. Pontos
+            // 2. Resultados em cheio (cheios)
+            // 3. Número de gols acertados (gols)
+            // 4. Resultados invertidos (invertidos)
+            const sortedUsers = [...usuariosClassificacao].sort((a, b) => {
+                if (b.pontos !== a.pontos) return b.pontos - a.pontos;
+                if (b.cheios !== a.cheios) return b.cheios - a.cheios;
+                if (b.gols !== a.gols) return b.gols - a.gols;
+                return b.invertidos - a.invertidos;
+            });
 
-            usuariosClassificacao.forEach((user, index) => {
+            sortedUsers.forEach((user, index) => {
                 const row = document.createElement('div');
                 row.className = 'usuario-row';
                 
-                // Pegar iniciais do nome para o avatar
-                const iniciais = user.nome.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                const initials = user.nome.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
                 
+                let currentMedal = "";
+                if (index === 0) currentMedal = "🥇";
+                else if (index === 1) currentMedal = "🥈";
+                else if (index === 2) currentMedal = "🥉";
+
                 row.innerHTML = `
                     <div class="user-info">
                         <span class="posicao">${index + 1}º</span>
-                        <div class="avatar">${iniciais}</div>
-                        <span class="nome-usuario">${user.nome} ${user.medalha}</span>
+                        <div class="avatar">${initials}</div>
+                        <span class="nome-usuario">${user.nome} <span class="status-badge">${currentMedal}</span></span>
                     </div>
                     <div class="pontuacao">
-                        ${user.pontos} <span style="font-size: 0.6em; color: #888; font-weight: normal;">pts</span>
+                        ${user.pontos}<span class="pts-label">PTS</span>
                     </div>
                 `;
                 container.appendChild(row);
             });
         }
+
+        function id(el) { return document.getElementById(el); }
     </script>
 </body>
-
 </html>
+
+

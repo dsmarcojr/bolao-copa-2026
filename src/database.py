@@ -1,27 +1,37 @@
 import sqlite3
 import os
 
-DB_PATH = os.path.join(os.path.dirname(__file__), '..', 'bolao.db')
+DB_DIR = os.path.dirname(__file__)
+USERS_DB_PATH = os.path.join(DB_DIR, '..', 'usuarios.db')
+PALPITES_DB_PATH = os.path.join(DB_DIR, '..', 'palpites.db')
 
-def get_connection():
-    return sqlite3.connect(DB_PATH)
+def get_users_connection():
+    return sqlite3.connect(USERS_DB_PATH)
+
+def get_palpites_connection():
+    return sqlite3.connect(PALPITES_DB_PATH)
 
 def init_db():
-    conn = get_connection()
-    cursor = conn.cursor()
-    
-    # Tabela de Usuários
-    cursor.execute('''
+    # Inicializa Banco de Usuários
+    conn_u = get_users_connection()
+    cursor_u = conn_u.cursor()
+    cursor_u.execute('''
         CREATE TABLE IF NOT EXISTS usuarios (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
-            usuario TEXT UNIQUE NOT NULL,
+            email TEXT UNIQUE NOT NULL,
             senha TEXT NOT NULL
         )
     ''')
+    conn_u.commit()
+    conn_u.close()
     
-    # Tabela de Jogos
-    cursor.execute('''
+    # Inicializa Banco de Palpites
+    conn_p = get_palpites_connection()
+    cursor_p = conn_p.cursor()
+    
+    # Tabela de Jogos (necessária para os palpites)
+    cursor_p.execute('''
         CREATE TABLE IF NOT EXISTS jogos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             time_1 TEXT NOT NULL,
@@ -31,26 +41,27 @@ def init_db():
     ''')
     
     # Tabela de Palpites
-    cursor.execute('''
+    cursor_p.execute('''
         CREATE TABLE IF NOT EXISTS palpites (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             usuario_id INTEGER NOT NULL,
             jogo_id INTEGER NOT NULL,
             placar_1 INTEGER NOT NULL,
             placar_2 INTEGER NOT NULL,
-            FOREIGN KEY (usuario_id) REFERENCES usuarios (id),
             FOREIGN KEY (jogo_id) REFERENCES jogos (id)
         )
     ''')
+    # Nota: Foreign key para usuarios não pode ser aplicada de forma rígida entre arquivos diferentes sem ATTACH, 
+    # mas manteremos a lógica de referência por ID.
     
-    conn.commit()
-    conn.close()
+    conn_p.commit()
+    conn_p.close()
 
-def add_user(nome, usuario, senha):
-    conn = get_connection()
+def add_user(nome, email, senha):
+    conn = get_users_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute('INSERT INTO usuarios (nome, usuario, senha) VALUES (?, ?, ?)', (nome, usuario, senha))
+        cursor.execute('INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)', (nome, email, senha))
         conn.commit()
         return cursor.lastrowid
     except sqlite3.IntegrityError:
@@ -58,28 +69,36 @@ def add_user(nome, usuario, senha):
     finally:
         conn.close()
 
-def verify_user(usuario, senha):
-    conn = get_connection()
+def verify_user_login(usuario_login, senha):
+    """
+    Verifica login. usuario_login pode ser o email ou o 'usuario' (prefixo do email).
+    """
+    conn = get_users_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT id, nome FROM usuarios WHERE usuario = ? AND senha = ?', (usuario, senha))
+    # Busca por email completo ou por prefixo (antes do @)
+    cursor.execute('''
+        SELECT id, nome, email FROM usuarios 
+        WHERE (email = ? OR substr(email, 1, instr(email, '@') - 1) = ?) 
+        AND senha = ?
+    ''', (usuario_login, usuario_login, senha))
     user = cursor.fetchone()
     conn.close()
-    return user # Retorna (id, nome) se encontrado, senão None
+    return user # Retorna (id, nome, email) se encontrado
 
 def add_palpite(usuario_id, jogo_id, placar_1, placar_2):
-    conn = get_connection()
+    conn = get_palpites_connection()
     cursor = conn.cursor()
     cursor.execute('''
         INSERT INTO palpites (usuario_id, jogo_id, placar_1, placar_2)
         VALUES (?, ?, ?, ?)
     ''', (usuario_id, jogo_id, placar_1, placar_2))
     conn.commit()
-    user_id = cursor.lastrowid
+    palpite_id = cursor.lastrowid
     conn.close()
-    return user_id
+    return palpite_id
 
 def get_all_users():
-    conn = get_connection()
+    conn = get_users_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM usuarios')
     users = cursor.fetchall()
@@ -87,12 +106,14 @@ def get_all_users():
     return users
 
 def get_all_palpites():
-    conn = get_connection()
+    conn = get_palpites_connection()
     cursor = conn.cursor()
+    # Nota: u.nome não está em palpites.db. 
+    # Para buscas complexas que unem os dois, precisaríamos de uma lógica que consulte ambos ou use ATTACH. 
+    # Por agora, retornamos apenas os dados de palpites.
     cursor.execute('''
-        SELECT p.id, u.nome, j.time_1, j.time_2, p.placar_1, p.placar_2
+        SELECT p.id, p.usuario_id, j.time_1, j.time_2, p.placar_1, p.placar_2
         FROM palpites p
-        JOIN usuarios u ON p.usuario_id = u.id
         JOIN jogos j ON p.jogo_id = j.id
     ''')
     palpites = cursor.fetchall()
@@ -101,4 +122,7 @@ def get_all_palpites():
 
 if __name__ == "__main__":
     init_db()
-    print("Banco de dados inicializado em:", os.path.abspath(DB_PATH))
+    print("Bancos de dados inicializados:")
+    print(f"- Usuários: {os.path.abspath(USERS_DB_PATH)}")
+    print(f"- Palpites: {os.path.abspath(PALPITES_DB_PATH)}")
+

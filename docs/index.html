@@ -4,96 +4,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolão Copa 2026</title>
+    <title>Bolão Copa 2026 - Login & Registro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-light: #60ad5e;
+            --secondary: #1b5e20;
+            --bg: #f0f4f0;
+            --white: #ffffff;
+            --text: #333333;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(46, 125, 50, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(46, 125, 50, 0.05) 0px, transparent 50%);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .header {
             text-align: center;
-            padding: 50px;
         }
 
-        h1 {
-            color: #3e7454;
+        .header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-        .container {
-            background: white;
-            padding: 40px;
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .forms-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            flex: 1;
+            min-width: 350px;
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            color: var(--secondary);
+            margin-top: 0;
+            font-weight: 600;
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 400;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            margin: auto;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            box-sizing: border-box;
+            background: #fafafa;
         }
 
-        input[type="text"] {
-            width: 80%;
-            padding: 10px;
-            margin: 20px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        input[type="password"] {
-            width: 80%;
-            padding: 10px;
-            margin: 20px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
+        input:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(96, 173, 94, 0.1);
+            background: #fff;
         }
 
         button {
-            background-color: #3e7454;
+            width: 100%;
+            background-color: var(--primary);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
-            font-size: 16px;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            margin-top: 10px;
         }
 
         button:hover {
-            background-color: #5fb384;
+            background-color: var(--secondary);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .footer-links {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: opacity 0.3s;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .forms-container {
+                flex-direction: column;
+            }
+            .card {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container" id="login-container">
-        <h1>🏆 Bolão Copa 2026</h1>
-        <p>Para começar a dar seus palpites, por favor, insira seu CPF e senha.</p>
-        <form id="login-form">
-            <input type="text" id="nome-participante" placeholder="Digite seu usuário" required>
-            <input type="password" id="senha" placeholder="Digite sua senha" required>
-            <br>
-            <button type="submit">Entrar</button>
-        </form>
-    </div>
+    <div class="main-wrapper">
+        <div class="header">
+            <h1>🏆 Bolão Copa 2026</h1>
+            <p>Sua chance de mostrar que entende de futebol!</p>
+        </div>
 
-    <div class="classificacao" id="classificacao-container">
-        <h1>Veja como está o bolão!</h1>
-        <div style="display: flex; justify-content: center; gap: 15px;">
-            <a href="classificacao.html"><button type="button">🏆 Classificação Geral</button></a>
-            <a href="resultados.html"><button type="button" style="background-color: #2c3e50;">⚽ Resultados Oficiais</button></a>
+        <div class="forms-container">
+            <!-- Login Card -->
+            <div class="card" id="login-card">
+                <h2>Já tenho conta</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-user">Usuário ou E-mail</label>
+                        <input type="text" id="login-user" placeholder="Ex: joao.silva ou joao.silva@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-pass">Senha</label>
+                        <input type="password" id="login-pass" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit">Entrar no Sistema</button>
+                </form>
+            </div>
+
+            <!-- Register Card -->
+            <div class="card" id="register-card">
+                <h2>Criar nova conta</h2>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="reg-nome">Nome Completo</label>
+                        <input type="text" id="reg-nome" placeholder="Seu nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">E-mail</label>
+                        <input type="email" id="reg-email" placeholder="seu@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-pass">Sua Senha</label>
+                        <input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres" required>
+                    </div>
+                    <button type="submit" class="btn-outline">Registrar e Participar</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <a href="classificacao.html">📊 Ver Classificação</a>
+            <a href="resultados.html">⚽ Resultados Oficiais</a>
         </div>
     </div>
 
     <script>
+        // Lógica de Login
         document.getElementById('login-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            const nome = document.getElementById('nome-participante').value.trim();
-            if (nome) {
-                // Salvar o nome no localStorage para usar na próxima página
-                localStorage.setItem('participante_atual', nome);
-                alert(`Olá, ${nome}! O sistema de banco de dados e login já está pronto no motor.py.`);
-                window.location.href = 'palpites.html';
+            const userInput = document.getElementById('login-user').value.trim();
+            const pass = document.getElementById('login-pass').value;
+
+            // Simulação de integração com o motor.py
+            console.log('Tentativa de login:', userInput);
+            
+            // Lógica conforme pedido: se o usuário for apenas o prefixo do email
+            // (Isso será validado no backend, mas aqui guardamos no localstorage)
+            localStorage.setItem('usuario_logado', userInput);
+            alert(`Bem-vindo de volta! Redirecionando para seus palpites...`);
+            window.location.href = 'palpites.html';
+        });
+
+        // Lógica de Registro
+        document.getElementById('register-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const nome = document.getElementById('reg-nome').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass = document.getElementById('reg-pass').value;
+
+            // Verificação manual obrigatória de e-mail (necessita de @)
+            if (!email.includes('@')) {
+                alert('Erro: Por favor, insira um e-mail válido contendo "@".');
+                return;
             }
+
+            // Extrair "usuário" do email para feedback
+            const usuarioSugerido = email.split('@')[0];
+
+            console.log('Registro:', { nome, email, usuarioSugerido });
+            
+            alert(`Usuário ${nome} registrado com sucesso!\nSeu login será: ${usuarioSugerido}`);
+            localStorage.setItem('usuario_logado', usuarioSugerido);
+            window.location.href = 'palpites.html';
         });
     </script>
 </body>
 
-</html>
+</html>

@@ -5,163 +5,173 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bolão Copa 2026 - Resultados Oficiais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-light: #60ad5e;
+            --secondary: #1b5e20;
+            --bg: #f0f4f0;
+            --white: #ffffff;
+            --text: #333333;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(46, 125, 50, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(46, 125, 50, 0.05) 0px, transparent 50%);
+            color: var(--text);
             margin: 0;
             padding: 20px;
+            min-height: 100vh;
         }
 
         header {
             text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
             margin-bottom: 30px;
         }
 
-        h1 {
-            color: #3e7454;
-        }
-
-        .dropdown-menu {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .dropdown-menu a {
+        .nav-btn {
             text-decoration: none;
-            color: #3e7454;
-            font-weight: bold;
-            margin: 0 10px;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            background: var(--white);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: 2px solid var(--primary);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
-        .dropdown-menu a:hover {
-            background-color: #e2ede6;
+        .nav-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
         }
 
-        .grupo-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: 0 auto 30px auto;
+        .main-container {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            max-width: 850px;
+            margin: auto;
+            border: 1px solid rgba(0,0,0,0.03);
         }
 
-        .grupo-titulo {
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            color: #3e7454;
+        .section-titulo {
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            color: var(--secondary);
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .jogo {
+        .jogo-result {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px dashed #eee;
+            padding: 20px 0;
+            border-bottom: 1px solid #f2f2f2;
         }
 
-        .jogo:last-child {
+        .jogo-result:last-child {
             border-bottom: none;
         }
 
         .equipe {
             display: flex;
             align-items: center;
-            width: 40%;
-            gap: 10px;
+            width: 38%;
+            gap: 15px;
         }
 
         .equipe.visitante {
-            justify-content: flex-end;
+            flex-direction: row-reverse;
             text-align: right;
         }
 
         .nome-time {
             flex: 1;
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-weight: 600;
+            font-size: 1.1rem;
         }
 
         .bandeira {
-            width: 32px;
-            height: 22px;
-            min-width: 32px;
+            width: 42px;
+            height: 28px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             object-fit: cover;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
         }
 
-        .placar-oficial {
+        .placar-display {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 20%;
-            font-size: 24px;
-            font-weight: bold;
-            color: #27ae60;
+            width: 24%;
+            gap: 12px;
         }
 
         .gol-box {
-            background: #e2ede6;
+            background: var(--primary);
+            color: white;
             width: 45px;
             height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
-            margin: 0 10px;
-            border: 1px solid #3e7454;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(46, 125, 50, 0.2);
         }
 
-        .x-separator {
-            font-weight: bold;
-            color: #666;
-            font-size: 18px;
+        .x-sep {
+            font-weight: 600;
+            color: #ccc;
+            font-size: 0.9rem;
         }
 
-        .status-badge {
-            font-size: 0.7em;
-            padding: 3px 8px;
-            border-radius: 12px;
-            margin-left: 10px;
+        .badge-status {
+            font-size: 0.65rem;
             text-transform: uppercase;
-        }
-
-        .status-encerrado {
-            background-color: #eee;
-            color: #666;
+            padding: 4px 8px;
+            background: #f0f0f0;
+            border-radius: 6px;
+            color: #888;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         @media (max-width: 600px) {
-            .equipe {
-                flex-direction: column;
-                font-size: 14px;
-                text-align: center;
-            }
-
-            .equipe.visitante {
-                flex-direction: column-reverse;
-            }
-
-            .bandeira {
-                margin: 5px 0;
-            }
-
-            .gol-box {
-                width: 35px;
-                height: 35px;
-                font-size: 18px;
-                margin: 0 5px;
-            }
+            .main-container { padding: 20px; }
+            .equipe { flex-direction: column; gap: 5px; text-align: center; }
+            .equipe.visitante { flex-direction: column; }
+            .nome-time { font-size: 0.9rem; }
+            .bandeira { width: 32px; height: 22px; }
+            .gol-box { width: 35px; height: 35px; font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -169,95 +179,93 @@
 <body>
     <header>
         <h1>⚽ Resultados Oficiais</h1>
-        <div class="dropdown-menu">
-            <a href="index.html">Início</a>
-            <a href="palpites.html">Meus Palpites</a>
-            <a href="classificacao.html">Classificação</a>
+        <div class="nav-container" id="nav-actions">
+            <a href="index.html" class="nav-btn">Início</a>
+            <a href="classificacao.html" class="nav-btn">🏆 Classificação</a>
         </div>
-        <p>Acompanhe os resultados reais da Copa para conferir seus pontos.</p>
+        <p style="color: #666;">Confira o placar real dos jogos da Copa 2026.</p>
     </header>
 
-    <div id="lista-resultados">
-        <!-- Os resultados serão carregados aqui via JavaScript -->
-        <p style="text-align: center;">Carregando resultados...</p>
+    <div class="main-container">
+        <div class="section-titulo">
+            <span>Rodada de Abertura</span>
+            <span class="badge-status">Ao vivo / Finalizados</span>
+        </div>
+
+        <div id="lista-resultados">
+            <!-- Mock results -->
+            <div class="jogo-result">
+                <div class="equipe">
+                    <span class="nome-time">México</span>
+                    <img src="https://flagcdn.com/mx.svg" class="bandeira">
+                </div>
+                <div class="placar-display">
+                    <div class="gol-box">2</div>
+                    <span class="x-sep">X</span>
+                    <div class="gol-box">1</div>
+                </div>
+                <div class="equipe visitante">
+                    <span class="nome-time">África do Sul</span>
+                    <img src="https://flagcdn.com/za.svg" class="bandeira">
+                </div>
+            </div>
+
+            <div class="jogo-result">
+                <div class="equipe">
+                    <span class="nome-time">Brasil</span>
+                    <img src="https://flagcdn.com/br.svg" class="bandeira">
+                </div>
+                <div class="placar-display">
+                    <div class="gol-box">3</div>
+                    <span class="x-sep">X</span>
+                    <div class="gol-box">0</div>
+                </div>
+                <div class="equipe visitante">
+                    <span class="nome-time">Marrocos</span>
+                    <img src="https://flagcdn.com/ma.svg" class="bandeira">
+                </div>
+            </div>
+
+            <div class="jogo-result">
+                <div class="equipe">
+                    <span class="nome-time">Canadá</span>
+                    <img src="https://flagcdn.com/ca.svg" class="bandeira">
+                </div>
+                <div class="placar-display">
+                    <div class="gol-box">1</div>
+                    <span class="x-sep">X</span>
+                    <div class="gol-box">1</div>
+                </div>
+                <div class="equipe visitante">
+                    <span class="nome-time">Eslovênia</span>
+                    <img src="https://flagcdn.com/si.svg" class="bandeira">
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        const gruposCopa = {
-            "Grupo A": [
-                { nome: "México", bandeira: "https://flagcdn.com/mx.svg" },
-                { nome: "África do Sul", bandeira: "https://flagcdn.com/za.svg" },
-                { nome: "Coréia do Sul", bandeira: "https://flagcdn.com/kr.svg" },
-                { nome: "Repescagem 1", bandeira: "https://upload.wikimedia.org/wikipedia/commons/b/b0/No_flag.svg" }
-            ],
-            // ... outros grupos seriam adicionados aqui para paridade total
-        };
-
-        // Mock de resultados oficiais para demonstração
-        const resultadosOficiais = {
-            1: { placar1: 2, placar2: 1, status: "Encerrado" },
-            2: { placar1: 0, placar2: 0, status: "Encerrado" },
-            3: { placar1: 1, placar2: 3, status: "Encerrado" },
-            4: { placar1: null, placar2: null, status: "A realizar" }
-        };
-
-        const jogosCopa = {};
-        let gameId = 1;
-
-        // Gerar estrutura de jogos (apenas Grupo A para exemplo, seguindo o padrão do palpites.html)
-        for (const grupo in gruposCopa) {
-            const t = gruposCopa[grupo];
-            jogosCopa[grupo] = [
-                { id: gameId++, time1: t[0].nome, bandeira1: t[0].bandeira, time2: t[1].nome, bandeira2: t[1].bandeira },
-                { id: gameId++, time1: t[2].nome, bandeira1: t[2].bandeira, time2: t[3].nome, bandeira2: t[3].bandeira },
-                { id: gameId++, time1: t[0].nome, bandeira1: t[0].bandeira, time2: t[2].nome, bandeira2: t[2].bandeira },
-                { id: gameId++, time1: t[1].nome, bandeira1: t[1].bandeira, time2: t[3].nome, bandeira2: t[3].bandeira },
-            ];
-        }
+        const usuarioLogado = localStorage.getItem('usuario_logado');
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderizarResultados();
-        });
-
-        function renderizarResultados() {
-            const container = document.getElementById('lista-resultados');
-            container.innerHTML = '';
-
-            for (const grupo in jogosCopa) {
-                let grupoHTML = `
-                    <div class="grupo-container">
-                        <h2 class="grupo-titulo">${grupo}</h2>
-                `;
-
-                jogosCopa[grupo].forEach(jogo => {
-                    const res = resultadosOficiais[jogo.id] || { placar1: "-", placar2: "-", status: "Agendado" };
-                    
-                    grupoHTML += `
-                        <div class="jogo">
-                            <div class="equipe">
-                                <span class="nome-time">${jogo.time1}</span>
-                                <img src="${jogo.bandeira1}" alt="Bandeira ${jogo.time1}" class="bandeira">
-                            </div>
-                            
-                            <div class="placar-oficial">
-                                <div class="gol-box">${res.placar1 !== null ? res.placar1 : "-"}</div>
-                                <span class="x-separator">X</span>
-                                <div class="gol-box">${res.placar2 !== null ? res.placar2 : "-"}</div>
-                            </div>
-
-                            <div class="equipe visitante">
-                                <img src="${jogo.bandeira2}" alt="Bandeira ${jogo.time2}" class="bandeira">
-                                <span class="nome-time">${jogo.time2}</span>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                grupoHTML += `</div>`;
-                container.innerHTML += grupoHTML;
+            const nav = document.getElementById('nav-actions');
+            if (usuarioLogado) {
+                const btnPalpites = document.createElement('a');
+                btnPalpites.href = 'palpites.html';
+                btnPalpites.className = 'nav-btn';
+                btnPalpites.innerHTML = '📝 Meus Palpites';
+                nav.appendChild(btnPalpites);
+            } else {
+                const btnLogin = document.createElement('a');
+                btnLogin.href = 'index.html';
+                btnLogin.className = 'nav-btn';
+                btnLogin.style.borderColor = '#2c3e50';
+                btnLogin.innerHTML = '🔑 Entrar / Registrar';
+                nav.appendChild(btnLogin);
             }
-        }
+        });
     </script>
 </body>
 
 </html>
+
