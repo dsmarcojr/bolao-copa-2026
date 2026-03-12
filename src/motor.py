@@ -8,11 +8,16 @@ def inicializar():
 
 def cadastrar_usuario(nome, email, senha):
     """Cadastra um novo usuário no banco de dados."""
+    if database.email_exists(email):
+        print(f"Erro: O email '{email}' já está em uso.")
+        return None
+        
     user_id = database.add_user(nome, email, senha)
     if user_id:
         print(f"Usuário {nome} cadastrado com sucesso! ID: {user_id}")
     else:
-        print(f"Erro: O email '{email}' já está em uso.")
+        # Fallback para o caso improvável de race condition ou erro inesperado
+        print(f"Erro inesperado ao cadastrar o email '{email}'.")
     return user_id
 
 def realizar_palpite(usuario_id, jogo_id, placar_1, placar_2):

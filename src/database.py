@@ -69,6 +69,15 @@ def add_user(nome, email, senha):
     finally:
         conn.close()
 
+def email_exists(email):
+    """Verifica se um email já está cadastrado."""
+    conn = get_users_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT 1 FROM usuarios WHERE email = ?', (email,))
+    exists = cursor.fetchone() is not None
+    conn.close()
+    return exists
+
 def verify_user_login(usuario_login, senha):
     """
     Verifica login. usuario_login pode ser o email ou o 'usuario' (prefixo do email).
