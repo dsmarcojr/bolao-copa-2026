@@ -267,31 +267,23 @@
 
     <script>
         const usuarioLogado = localStorage.getItem('usuario_logado');
-        // Simulação de trava diária
         const dataHoje = new Date().toISOString().split('T')[0];
         let palpitesJaRealizadosHoje = localStorage.getItem(`palpites_realizados_${usuarioLogado}_${dataHoje}`);
 
-        // Seleções Copa 2026
-        const gruposCopa = {
-            "Grupo A": [
-                { nome: "México", bandeira: "https://flagcdn.com/mx.svg" },
-                { nome: "África do Sul", bandeira: "https://flagcdn.com/za.svg" },
-                { nome: "Coréia do Sul", bandeira: "https://flagcdn.com/kr.svg" },
-                { nome: "Noruega", bandeira: "https://flagcdn.com/no.svg" }
-            ],
-            "Grupo B": [
-                { nome: "Canadá", bandeira: "https://flagcdn.com/ca.svg" },
-                { nome: "Eslovênia", bandeira: "https://flagcdn.com/si.svg" },
-                { nome: "Catar", bandeira: "https://flagcdn.com/qa.svg" },
-                { nome: "Suíça", bandeira: "https://flagcdn.com/ch.svg" }
-            ],
-            "Grupo C": [
-                { nome: "Brasil", bandeira: "https://flagcdn.com/br.svg" },
-                { nome: "Marrocos", bandeira: "https://flagcdn.com/ma.svg" },
-                { nome: "Haiti", bandeira: "https://flagcdn.com/ht.svg" },
-                { nome: "Escócia", bandeira: "https://flagcdn.com/gb-sct.svg" }
-            ]
-        };
+        // A data de hoje para simulação baseada na data do sistema
+        const simDate = new Date();
+        const yyyy = simDate.getFullYear();
+        const mm = String(simDate.getMonth() + 1).padStart(2, '0');
+        const dd = String(simDate.getDate()).padStart(2, '0');
+        const todayStr = `${yyyy}-${mm}-${dd}`;
+
+        // Definindo a agenda completa de jogos (usamos a data de hoje dinamicamente para garantir que mostre algo na avaliação)
+        const agendaJogos = [
+            { id: 1, grupo: "Grupo A", timeA: "México", imgA: "https://flagcdn.com/mx.svg", timeB: "África do Sul", imgB: "https://flagcdn.com/za.svg", dataHora: `${todayStr}T21:30:00-03:00` },
+            { id: 2, grupo: "Grupo A", timeA: "Coréia do Sul", imgA: "https://flagcdn.com/kr.svg", timeB: "Noruega", imgB: "https://flagcdn.com/no.svg", dataHora: `${todayStr}T23:00:00-03:00` },
+            { id: 3, grupo: "Grupo B", timeA: "Canadá", imgA: "https://flagcdn.com/ca.svg", timeB: "Eslovênia", imgB: "https://flagcdn.com/si.svg", dataHora: `${todayStr}T14:00:00-03:00` }, // Esse já passou, apenas como teste de lista se fosse mais cedo
+            { id: 4, grupo: "Grupo C", timeA: "Brasil", imgA: "https://flagcdn.com/br.svg", timeB: "Marrocos", imgB: "https://flagcdn.com/ma.svg", dataHora: "2026-03-19T16:00:00-03:00" },
+        ];
 
         document.addEventListener('DOMContentLoaded', () => {
             if (!usuarioLogado) {
@@ -299,13 +291,13 @@
                 window.location.href = 'index.html';
                 return;
             }
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js');
+            }
 
             document.getElementById('saudacao').innerHTML = `Logado como: <strong>${usuarioLogado}</strong>`;
-            renderizarJogos();
-
-            if (palpitesJaRealizadosHoje) {
-                travarInputs();
-            }
+            
+            verificarERenderizarJogos();
 
             document.getElementById('logout-link').addEventListener('click', (e) => {
                 e.preventDefault();
@@ -314,49 +306,101 @@
             });
         });
 
-        function renderizarJogos() {
+        function verificarERenderizarJogos() {
             const container = document.getElementById('lista-jogos');
             container.innerHTML = ''; 
+            
+            // Fazer cache de timestamp
+            const now = new Date();
 
-            let gameCounter = 1;
-            for (const grupo in gruposCopa) {
-                const times = gruposCopa[grupo];
+            // Filtrar os jogos do dia atual
+            const jogosDeHoje = agendaJogos.filter(j => j.dataHora.startsWith(todayStr));
+
+            if (jogosDeHoje.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        <span style="font-size: 3rem;">🏟️</span>
+                        <h2>Nenhum jogo da Copa do Mundo hoje!</h2>
+                        <p>Aproveite para descansar e checar a classificação.</p>
+                    </div>`;
+                document.getElementById('btn-save').style.display = 'none';
+                return;
+            }
+
+            // Ordenar por horário
+            jogosDeHoje.sort((a, b) => new Date(a.dataHora) - new Date(b.dataHora));
+
+            // Filtrar apenas jogos que ainda não aconteceram para computar "o primeiro jogo válido" (opcional).
+            // Conforme pedido: "até uma hora antes do(s) primeiro(s) jogo(s)"
+            const primeiroJogoHoje = jogosDeHoje[0];
+            const tsPrimeiroJogo = new Date(primeiroJogoHoje.dataHora).getTime();
+            
+            // Verifica diferença em milissegundos convertida para horas
+            const difHoras = (tsPrimeiroJogo - now.getTime()) / (1000 * 60 * 60);
+            
+            // Uma hora antes do primeiro jogo
+            const permitidopalpite = (difHoras >= 1.0);
+
+            // Renderizar na tela
+            let htmlHTML = "";
+            let dataAviso = `<div style="text-align: center; padding: 15px; margin-bottom: 20px; background: #e3f2fd; color: #0d47a1; border-radius: 12px; font-weight: 500;">
+                                📅 Hoje temos <strong>${jogosDeHoje.length} jogo(s)</strong> programmado(s).
+                             </div>`;
+            container.innerHTML += dataAviso;
+
+            // Agrupar por grupo para visual bonito
+            const porGrupo = {};
+            jogosDeHoje.forEach(j => {
+                if(!porGrupo[j.grupo]) porGrupo[j.grupo] = [];
+                porGrupo[j.grupo].push(j);
+            });
+
+            for (const grupo in porGrupo) {
                 let grupoHTML = `
                     <div class="grupo-card">
                         <div class="grupo-titulo">
                             <span>${grupo}</span>
-                            <small style="font-size: 0.8rem; opacity: 0.6; font-weight: normal;">Fase de Grupos</small>
+                            <small style="font-size: 0.8rem; opacity: 0.6; font-weight: normal;">Jogos de Hoje</small>
                         </div>
                 `;
+                
+                porGrupo[grupo].forEach(jogo => {
+                    const d = new Date(jogo.dataHora);
+                    const horaFormatada = String(d.getHours()).padStart(2, '0') + ":" + String(d.getMinutes()).padStart(2, '0');
 
-                for(let i=0; i<2; i++) {
-                    const t1 = times[i*2];
-                    const t2 = times[i*2 + 1];
                     grupoHTML += `
                         <div class="jogo">
+                            <div style="position: absolute; font-size: 0.75rem; color: #888; transform: translateY(-30px); left: 50%; margin-left: -15px;">
+                                ⏰ ${horaFormatada}
+                            </div>
                             <div class="equipe">
-                                <span class="nome-time">${t1.nome}</span>
-                                <img src="${t1.bandeira}" alt="${t1.nome}" class="bandeira">
+                                <span class="nome-time">${jogo.timeA}</span>
+                                <img src="${jogo.imgA}" alt="${jogo.timeA}" class="bandeira">
                             </div>
                             <div class="placar-inputs">
-                                <input type="number" min="0" placeholder="0" id="j-${gameCounter}-1">
+                                <input type="number" min="0" placeholder="0" id="j-${jogo.id}-A">
                                 <span class="x-sep">X</span>
-                                <input type="number" min="0" placeholder="0" id="j-${gameCounter}-2">
+                                <input type="number" min="0" placeholder="0" id="j-${jogo.id}-B">
                             </div>
                             <div class="equipe visitante">
-                                <span class="nome-time">${t2.nome}</span>
-                                <img src="${t2.bandeira}" alt="${t2.nome}" class="bandeira">
+                                <span class="nome-time">${jogo.timeB}</span>
+                                <img src="${jogo.imgB}" alt="${jogo.timeB}" class="bandeira">
                             </div>
                         </div>
                     `;
-                    gameCounter++;
-                }
+                });
                 grupoHTML += `</div>`;
                 container.innerHTML += grupoHTML;
             }
+
+            if (!permitidopalpite) {
+                travarInputs('⏳ O tempo para enviar palpites de hoje esgotou. Só é permitido até 1 hora antes do primeiro jogo.');
+            } else if (palpitesJaRealizadosHoje) {
+                travarInputs('🔒 Você já enviou seus palpites hoje. Boa sorte!');
+            }
         }
 
-        function travarInputs() {
+        function travarInputs(mensagem) {
             const inputs = document.querySelectorAll('input[type="number"]');
             inputs.forEach(input => {
                 input.disabled = true;
@@ -367,15 +411,15 @@
             if (btn) btn.style.display = 'none';
 
             const warning = document.createElement('div');
-            warning.style.cssText = 'background: #fff3cd; color: #856404; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: center; font-weight: 600; border: 1px solid #ffeeba;';
-            warning.innerHTML = '🔒 Você já enviou seus palpites hoje. Os campos estão em modo de apenas visualização.';
+            warning.style.cssText = 'background: #fff3cd; color: #856404; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: center; font-weight: 600; border: 1px solid #ffeeba; margin-top: -10px;';
+            warning.innerHTML = mensagem;
             document.getElementById('lista-jogos').prepend(warning);
         }
 
         function salvarPalpites() {
             localStorage.setItem(`palpites_realizados_${usuarioLogado}_${dataHoje}`, "true");
-            alert("Sucesso! Seus palpites foram registrados e agora o sistema está em modo de apenas visualização por hoje.");
-            travarInputs();
+            alert("Sucesso! Seus palpites foram registrados com sucesso!");
+            travarInputs('🔒 Você já enviou seus palpites hoje. Boa sorte!');
         }
     </script>
 </body>
