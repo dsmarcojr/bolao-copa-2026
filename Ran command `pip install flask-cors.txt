@@ -1,0 +1,14 @@
+Ran command: `pip install flask-cors`
+Edited app.py
+Edited index.html
+
+Agora a sua página em HTML está conectada ao banco de dados do servidor Flask real!
+
+Foi isso que modifiquei:
+1. **Adicionado endpoints no Servidor Backend**: O arquivo [app.py](cci:7://file:///c:/Users/42941975870/Documents/GitHub/bolao-copa-2026/app.py:0:0-0:0) agora trabalha como uma API (`/api/login` e `/api/register`). Para que ele possa se comunicar com seu frontend sem problemas de rota, eu instalei e apliquei o `flask-cors`. As validações de segurança e regras do banco ([usuarios.db](cci:7://file:///c:/Users/42941975870/Documents/GitHub/bolao-copa-2026/usuarios.db:0:0-0:0)) e o hash da senha agora rodam nesse backend.
+2. **Javascript do [docs/index.html](cci:7://file:///c:/Users/42941975870/Documents/GitHub/bolao-copa-2026/docs/index.html:0:0-0:0) atualizado**: Troquei o código antigo de "simulação" (`console.log('Tentativa de login...')`) por chamadas HTTP genuínas via `fetch()`. O Javascript envia uma requisição `POST` para `http://127.0.0.1:5000`.
+
+**Como testar a mudança na prática:**
+- Mantenha ou reinicie o seu backend digitando no terminal do Visual Studio: `python app.py` (Lembre-se: o backend é obrigatório estar rodando, do contrário exibirá um alerta *Erro ao conectar com o servidor*).
+- Vá no seu frontend visual ([docs/index.html](cci:7://file:///c:/Users/42941975870/Documents/GitHub/bolao-copa-2026/docs/index.html:0:0-0:0)) e tente inserir dados aleatórios no login. A página fará o ping no servidor e agora **negará com a mensagem de alerta real**: `"Erro: Usuário e/ou senha incorretos ou não existem."`
+- Realize o registro no botão de Nova Conta, e veja que ele não deixará fazer contas duplas!

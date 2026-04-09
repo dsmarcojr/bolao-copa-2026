@@ -201,7 +201,7 @@
 <body>
     <div class="main-wrapper">
         <div class="header">
-            <h1>🏆 Bolão Copa 2026</h1>
+            <h1 style="font-size: 4rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px var(--primary), 0 0 20px #8b5cf6, 0 0 30px #d946ef; margin-bottom: 0;">BOLÃO COPA 2026</h1>
             <p>Sua chance de mostrar que entende de futebol!</p>
         </div>
 
@@ -250,43 +250,64 @@
     </div>
 
     <script>
+        const API_URL = 'http://127.0.0.1:5000';
+
         // Lógica de Login
-        document.getElementById('login-form').addEventListener('submit', function (e) {
+        document.getElementById('login-form').addEventListener('submit', async function (e) {
             e.preventDefault();
             const userInput = document.getElementById('login-user').value.trim();
             const pass = document.getElementById('login-pass').value;
 
-            // Simulação de integração com o motor.py
-            console.log('Tentativa de login:', userInput);
-            
-            // Lógica conforme pedido: se o usuário for apenas o prefixo do email
-            // (Isso será validado no backend, mas aqui guardamos no localstorage)
-            localStorage.setItem('usuario_logado', userInput);
-            alert(`Bem-vindo de volta! Redirecionando para seus palpites...`);
-            window.location.href = 'palpites.html';
+            try {
+                const response = await fetch(`${API_URL}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ login: userInput, senha: pass })
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    localStorage.setItem('usuario_logado', data.usuario);
+                    alert(`Bem-vindo de volta, ${data.nome}! Redirecionando para seus palpites...`);
+                    window.location.href = 'palpites.html';
+                } else {
+                    alert('Erro: ' + (data.message || 'Usuário e/ou senha incorretos ou não existem.'));
+                }
+            } catch (err) {
+                alert('Erro ao conectar com o servidor. O backend (app.py) está rodando em http://127.0.0.1:5000?');
+            }
         });
 
         // Lógica de Registro
-        document.getElementById('register-form').addEventListener('submit', function (e) {
+        document.getElementById('register-form').addEventListener('submit', async function (e) {
             e.preventDefault();
             const nome = document.getElementById('reg-nome').value.trim();
             const email = document.getElementById('reg-email').value.trim();
             const pass = document.getElementById('reg-pass').value;
 
-            // Verificação manual obrigatória de e-mail (necessita de @)
             if (!email.includes('@')) {
                 alert('Erro: Por favor, insira um e-mail válido contendo "@".');
                 return;
             }
 
-            // Extrair "usuário" do email para feedback
-            const usuarioSugerido = email.split('@')[0];
-
-            console.log('Registro:', { nome, email, usuarioSugerido });
-            
-            alert(`Usuário ${nome} registrado com sucesso!\nSeu login será: ${usuarioSugerido}`);
-            localStorage.setItem('usuario_logado', usuarioSugerido);
-            window.location.href = 'palpites.html';
+            try {
+                const response = await fetch(`${API_URL}/api/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome: nome, email: email, senha: pass })
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    alert(`Usuário ${nome} registrado com sucesso!\nSeu login será: ${data.usuario}`);
+                    localStorage.setItem('usuario_logado', data.usuario);
+                    window.location.href = 'palpites.html';
+                } else {
+                    alert('Erro no registro: ' + (data.message || 'Problema ao criar a conta.'));
+                }
+            } catch (err) {
+                alert('Erro ao conectar com o servidor. O backend (app.py) está rodando em http://127.0.0.1:5000?');
+            }
         });
     </script>
 </body>

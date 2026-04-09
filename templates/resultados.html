@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Resultados Oficiais</h2>
+<p style="color: #94a3b8;">Confira os resultados reais das partidas finalizadas.</p>
+
+{% if matches %}
+    <div class="matches-list" style="margin-top: 2rem;">
+        {% for match in matches %}
+            <div class="match-card" style="background: #334155; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <div style="text-align: center; margin-bottom: 1rem; font-weight: bold; color: #cbd5e1;">
+                    Data: {{ match.data_jogo }} | Horário: {{ match.horario_jogo }}
+                </div>
+                
+                <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; font-size: 1.5rem;">
+                    <div style="text-align: right; min-width: 120px; font-weight: 600;">
+                        {{ match.home_team_name }}
+                    </div>
+                    
+                    <div style="padding: 0.5rem 1rem; background: #0f172a; border-radius: 6px; font-weight: bold;">
+                        {{ match.resultado_home }}
+                    </div>
+                    
+                    <span style="font-weight: bold;">X</span>
+                    
+                    <div style="padding: 0.5rem 1rem; background: #0f172a; border-radius: 6px; font-weight: bold;">
+                        {{ match.resultado_away }}
+                    </div>
+                    
+                    <div style="min-width: 120px; font-weight: 600;">
+                        {{ match.away_team_name }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p style="margin-top: 2rem;">Nenhum resultado oficial disponível ainda.</p>
+{% endif %}
+{% endblock %}

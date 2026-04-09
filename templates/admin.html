@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Painel do Administrador (Master)</h2>
+<p style="color: #94a3b8;">Insira os resultados oficiais das partidas.</p>
+
+<div class="matches-list" style="margin-top: 2rem;">
+    {% for match in matches %}
+        <div class="match-card" style="background: #334155; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+            <div style="text-align: center; margin-bottom: 1rem; font-weight: bold; color: #cbd5e1;">
+                Data: {{ match.data_jogo }} | Horário: {{ match.horario_jogo }}
+            </div>
+            
+            <form method="POST" action="/admin" style="display: flex; justify-content: center; align-items: center; gap: 1rem;">
+                <input type="hidden" name="match_id" value="{{ match.id }}">
+                
+                <div style="text-align: right; min-width: 120px; font-weight: 600;">
+                    {{ match.home_team_name }}
+                </div>
+                
+                <input type="number" name="score_home" value="{{ match.resultado_home if match.resultado_home != None else '' }}" min="0" required
+                       style="width: 60px; text-align: center; font-size: 1.2rem; padding: 0.5rem; border-radius: 4px; border: none; background: #0f172a; color: white;">
+                
+                <span style="font-weight: bold;">X</span>
+                
+                <input type="number" name="score_away" value="{{ match.resultado_away if match.resultado_away != None else '' }}" min="0" required
+                       style="width: 60px; text-align: center; font-size: 1.2rem; padding: 0.5rem; border-radius: 4px; border: none; background: #0f172a; color: white;">
+                
+                <div style="min-width: 120px; font-weight: 600;">
+                    {{ match.away_team_name }}
+                </div>
+                
+                <button type="submit" class="btn" style="width: auto; padding: 0.5rem 1rem; background-color: #f59e0b;">Atualizar Oficial</button>
+            </form>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

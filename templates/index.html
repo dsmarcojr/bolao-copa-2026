@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>Jogos e Palpites</h2>
+    <div style="text-align: right; color: #94a3b8; font-size: 0.9rem;">
+        <div>Hoje: {{ date }}</div>
+        <div>Hora Atual: {{ time }}</div>
+    </div>
+</div>
+
+{% if not can_bet_today %}
+    <div class="flash error" style="margin-top: 1rem;">Palpites para os jogos do dia de hoje estão bloqueados. Só é possível palpitar ou editar entre 04:00 e 12:00. O sistema está exibindo apenas jogos de datas futuras.</div>
+{% endif %}
+
+{% if matches %}
+    <div class="matches-list" style="margin-top: 2rem;">
+        {% for match in matches %}
+            <div class="match-card" style="background: #334155; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <div style="text-align: center; margin-bottom: 1rem; font-weight: bold; color: #cbd5e1;">
+                    Data: {{ match.data_jogo }} | Horário: {{ match.horario_jogo }}
+                </div>
+                
+                <form method="POST" action="/" style="display: flex; justify-content: center; align-items: center; gap: 1rem;">
+                    <input type="hidden" name="match_id" value="{{ match.id }}">
+                    
+                    <div style="text-align: right; min-width: 120px; font-weight: 600;">
+                        {{ match.home_team_name }}
+                    </div>
+                    
+                    <input type="number" name="score_home" value="{{ match.bet_home }}" min="0" required
+                           style="width: 60px; text-align: center; font-size: 1.2rem; padding: 0.5rem; border-radius: 4px; border: none; background: #0f172a; color: white;">
+                    
+                    <span style="font-weight: bold;">X</span>
+                    
+                    <input type="number" name="score_away" value="{{ match.bet_away }}" min="0" required
+                           style="width: 60px; text-align: center; font-size: 1.2rem; padding: 0.5rem; border-radius: 4px; border: none; background: #0f172a; color: white;">
+                    
+                    <div style="min-width: 120px; font-weight: 600;">
+                        {{ match.away_team_name }}
+                    </div>
+                    
+                    <button type="submit" class="btn" style="width: auto; padding: 0.5rem 1rem;">Salvar</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p style="margin-top: 2rem;">Nenhum jogo disponível no momento.</p>
+{% endif %}
+{% endblock %}
