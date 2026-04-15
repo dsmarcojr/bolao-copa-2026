@@ -175,41 +175,72 @@ def home():
                     
         return redirect(url_for('home'))
 
-    # Fetch matches
+    # Calculate user score
+    user_score = 0
     with get_db_connection(PARTIDAS_DB) as conn_partidas:
-        if can_bet_today:
-            matches_query = "SELECT * FROM matches WHERE data_jogo >= ? ORDER BY data_jogo, horario_jogo"
-            matches = conn_partidas.execute(matches_query, (current_date,)).fetchall()
-        else:
-            # Only future dates
-            matches_query = "SELECT * FROM matches WHERE data_jogo > ? ORDER BY data_jogo, horario_jogo"
-            matches = conn_partidas.execute(matches_query, (current_date,)).fetchall()
+        with get_db_connection(PALPITES_DB) as conn_palpites:
+            bets_raw = conn_palpites.execute("SELECT * FROM bets WHERE user_id = ?", (session['user_id'],)).fetchall()
+            for bet in bets_raw:
+                match = conn_partidas.execute("SELECT * FROM matches WHERE id = ?", (bet['match_id'],)).fetchone()
+                if match and match['resultado_home'] is not None and match['resultado_away'] is not None:
+                    if bet['score_home'] == match['resultado_home'] and bet['score_away'] == match['resultado_away']:
+                        user_score += 5
+                    else:
+                        bet_winner = 'home' if bet['score_home'] > bet['score_away'] else ('away' if bet['score_home'] < bet['score_away'] else 'draw')
+                        match_winner = 'home' if match['resultado_home'] > match['resultado_away'] else ('away' if match['resultado_home'] < match['resultado_away'] else 'draw')
+                        if bet_winner == match_winner:
+                            user_score += 2
 
     # Load teams
     with get_db_connection(SELECOES_DB) as conn_selecoes:
         teams = {row['id']: row['nome_selecao'] for row in conn_selecoes.execute("SELECT * FROM teams").fetchall()}
 
-    # Load user bets
+    # Load user bets dictionary for quick access
+    user_bets = {bet['match_id']: bet for bet in bets_raw}
+
+    # Ultimos 4 palpites
+    ultimos_palpites = []
     with get_db_connection(PALPITES_DB) as conn_palpites:
-        bets_raw = conn_palpites.execute("SELECT * FROM bets WHERE user_id = ?", (session['user_id'],)).fetchall()
-        user_bets = {bet['match_id']: bet for bet in bets_raw}
+        recent_bets_raw = conn_palpites.execute("SELECT * FROM bets WHERE user_id = ? ORDER BY id DESC LIMIT 4", (session['user_id'],)).fetchall()
+        with get_db_connection(PARTIDAS_DB) as conn_partidas:
+            for bet in recent_bets_raw:
+                match = conn_partidas.execute("SELECT * FROM matches WHERE id = ?", (bet['match_id'],)).fetchone()
+                if match:
+                    bet_dict = dict(bet)
+                    bet_dict['data_jogo'] = match['data_jogo']
+                    bet_dict['horario_jogo'] = match['horario_jogo']
+                    bet_dict['home_team_name'] = teams.get(match['home_team_id'], "Unknown")
+                    bet_dict['away_team_name'] = teams.get(match['away_team_id'], "Unknown")
+                    bet_dict['resultado_home'] = match['resultado_home']
+                    bet_dict['resultado_away'] = match['resultado_away']
+                    ultimos_palpites.append(bet_dict)
 
-    display_matches = []
-    for m in matches:
-        m_dict = dict(m)
-        m_dict['home_team_name'] = teams.get(m['home_team_id'], "Unknown")
-        m_dict['away_team_name'] = teams.get(m['away_team_id'], "Unknown")
-        # Check if already bet
-        bet = user_bets.get(m['id'])
-        if bet:
-            m_dict['bet_home'] = bet['score_home']
-            m_dict['bet_away'] = bet['score_away']
+    # 4 proximos jogos
+    proximos_jogos = []
+    with get_db_connection(PARTIDAS_DB) as conn_partidas:
+        if can_bet_today:
+            q = "SELECT * FROM matches WHERE data_jogo > ? OR (data_jogo = ? AND horario_jogo >= ?) ORDER BY data_jogo ASC, horario_jogo ASC LIMIT 4"
+            upcoming_matches = conn_partidas.execute(q, (current_date, current_date, now.strftime('%H:%M'))).fetchall()
         else:
-            m_dict['bet_home'] = ''
-            m_dict['bet_away'] = ''
-        display_matches.append(m_dict)
+            q = "SELECT * FROM matches WHERE data_jogo > ? ORDER BY data_jogo ASC, horario_jogo ASC LIMIT 4"
+            upcoming_matches = conn_partidas.execute(q, (current_date,)).fetchall()
+            
+        for m in upcoming_matches:
+            m_dict = dict(m)
+            m_dict['home_team_name'] = teams.get(m['home_team_id'], "Unknown")
+            m_dict['away_team_name'] = teams.get(m['away_team_id'], "Unknown")
+            bet = user_bets.get(m['id'])
+            if bet:
+                m_dict['bet_home'] = bet['score_home']
+                m_dict['bet_away'] = bet['score_away']
+            else:
+                m_dict['bet_home'] = ''
+                m_dict['bet_away'] = ''
+            proximos_jogos.append(m_dict)
 
-    return render_template('index.html', matches=display_matches, date=current_date, time=now.strftime("%H:%M:%S"), can_bet_today=can_bet_today)
+    return render_template('index.html', date=current_date, time=now.strftime("%H:%M:%S"), 
+                           can_bet_today=can_bet_today, user_score=user_score, 
+                           ultimos_palpites=ultimos_palpites, proximos_jogos=proximos_jogos)
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():

@@ -1,51 +1,93 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center;">
-    <h2>Jogos e Palpites</h2>
-    <div style="text-align: right; color: #94a3b8; font-size: 0.9rem;">
-        <div>Hoje: {{ date }}</div>
-        <div>Hora Atual: {{ time }}</div>
-    </div>
+
+<div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; text-align: center; margin: 0 auto 2rem auto; border-left: 5px solid var(--primary); max-width: 800px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+    <h3 style="margin-bottom: 0.5rem; color: #555;">Sua Pontuação até o momento</h3>
+    <div style="font-size: 3rem; font-weight: bold; color: var(--primary);">{{ user_score }} <span style="font-size: 1.2rem; color: #888; font-weight: normal;">pts</span></div>
 </div>
 
 {% if not can_bet_today %}
-    <div class="flash error" style="margin-top: 1rem;">Palpites para os jogos do dia de hoje estão bloqueados. Só é possível palpitar ou editar entre 04:00 e 12:00. O sistema está exibindo apenas jogos de datas futuras.</div>
+    <div class="flash error" style="max-width: 800px; margin: 0 auto 2rem auto;">Palpites para os jogos do dia de hoje estão bloqueados. Só é possível palpitar ou editar entre 04:00 e 12:00. O sistema está exibindo apenas jogos de datas futuras.</div>
 {% endif %}
 
-{% if matches %}
-    <div class="matches-list" style="margin-top: 2rem;">
-        {% for match in matches %}
-            <div class="match-card" style="background: #334155; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
-                <div style="text-align: center; margin-bottom: 1rem; font-weight: bold; color: #cbd5e1;">
-                    Data: {{ match.data_jogo }} | Horário: {{ match.horario_jogo }}
-                </div>
-                
-                <form method="POST" action="/" style="display: flex; justify-content: center; align-items: center; gap: 1rem;">
-                    <input type="hidden" name="match_id" value="{{ match.id }}">
-                    
-                    <div style="text-align: right; min-width: 120px; font-weight: 600;">
-                        {{ match.home_team_name }}
-                    </div>
-                    
-                    <input type="number" name="score_home" value="{{ match.bet_home }}" min="0" required
-                           style="width: 60px; text-align: center; font-size: 1.2rem; padding: 0.5rem; border-radius: 4px; border: none; background: #0f172a; color: white;">
-                    
-                    <span style="font-weight: bold;">X</span>
-                    
-                    <input type="number" name="score_away" value="{{ match.bet_away }}" min="0" required
-                           style="width: 60px; text-align: center; font-size: 1.2rem; padding: 0.5rem; border-radius: 4px; border: none; background: #0f172a; color: white;">
-                    
-                    <div style="min-width: 120px; font-weight: 600;">
-                        {{ match.away_team_name }}
-                    </div>
-                    
-                    <button type="submit" class="btn" style="width: auto; padding: 0.5rem 1rem;">Salvar</button>
-                </form>
-            </div>
-        {% endfor %}
+<div class="grupo-card">
+    <div class="grupo-titulo">
+        <span>Próximos 4 Jogos</span>
     </div>
-{% else %}
-    <p style="margin-top: 2rem;">Nenhum jogo disponível no momento.</p>
-{% endif %}
+    {% if proximos_jogos %}
+        <div id="lista-jogos">
+            {% for match in proximos_jogos %}
+                <form method="POST" action="/" class="jogo">
+                    <input type="hidden" name="match_id" value="{{ match.id }}">
+                    <div style="position: absolute; font-size: 0.75rem; color: #888; transform: translateY(-30px); left: 50%; margin-left: -60px;">
+                        Data: {{ match.data_jogo }} | {{ match.horario_jogo }}
+                    </div>
+                    
+                    <div class="equipe">
+                        <span class="nome-time">{{ match.home_team_name }}</span>
+                    </div>
+                    
+                    <div class="placar-inputs">
+                        <input type="number" name="score_home" value="{{ match.bet_home }}" min="0" required>
+                        <span class="x-sep">X</span>
+                        <input type="number" name="score_away" value="{{ match.bet_away }}" min="0" required>
+                    </div>
+                    
+                    <div class="equipe visitante">
+                        <span class="nome-time">{{ match.away_team_name }}</span>
+                    </div>
+                    
+                    <button type="submit" style="position: absolute; right: 20px; background: none; border: none; cursor: pointer; color: var(--primary); font-size: 1.8rem;" title="Salvar Palpite">💾</button>
+                </form>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="text-align: center; color: #888;">Nenhum jogo futuro programado.</p>
+    {% endif %}
+</div>
+
+<div class="grupo-card">
+    <div class="grupo-titulo">
+        <span>Últimos 4 Palpites Realizados</span>
+    </div>
+    {% if ultimos_palpites %}
+        <div id="lista-palpites">
+            {% for bet in ultimos_palpites %}
+                <div class="jogo-result">
+                    <div style="position: absolute; font-size: 0.75rem; color: #888; transform: translateY(-30px); left: 50%; margin-left: -50px;">
+                        {{ bet.data_jogo }} {{ bet.horario_jogo }}
+                    </div>
+                    
+                    <div class="equipe">
+                        <span class="nome-time" style="color: var(--primary);">{{ bet.home_team_name }}</span>
+                    </div>
+                    
+                    <div class="placar-display">
+                        <div class="gol-box" style="background: #fff; color: var(--primary); border: 2px solid var(--primary);">{{ bet.score_home }}</div>
+                        <span class="x-sep">X</span>
+                        <div class="gol-box" style="background: #fff; color: var(--primary); border: 2px solid var(--primary);">{{ bet.score_away }}</div>
+                    </div>
+                    
+                    <div class="equipe visitante">
+                        <span class="nome-time" style="color: var(--primary);">{{ bet.away_team_name }}</span>
+                    </div>
+                    
+                    {% if bet.resultado_home is not none %}
+                        <div style="position: absolute; font-size: 0.8rem; background: var(--primary); color: white; padding: 3px 10px; border-radius: 4px; transform: translateY(30px); left: 50%; margin-left: -48px;">
+                            Real: {{ bet.resultado_home }} x {{ bet.resultado_away }}
+                        </div>
+                    {% else %}
+                        <div style="position: absolute; font-size: 0.8rem; background: #f59e0b; color: white; padding: 3px 10px; border-radius: 4px; transform: translateY(30px); left: 50%; margin-left: -40px;">
+                            Aguardando
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="text-align: center; color: #888;">Você ainda não realizou nenhum palpite.</p>
+    {% endif %}
+</div>
+
 {% endblock %}
