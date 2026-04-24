@@ -1,0 +1,114 @@
+:root {
+    --primary: #2e7d32;
+    --primary-light: #60ad5e;
+    --secondary: #1b5e20;
+    --bg: #f0f4f0;
+    --white: #ffffff;
+    --text: #333333;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-top: 20px;
+}
+
+header h1 {
+    color: var(--primary);
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+}
+
+.greeting {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.nav-btn {
+    text-decoration: none;
+    background: var(--white);
+    color: var(--primary);
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: 2px solid var(--primary);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.nav-btn:hover {
+    background: var(--primary);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.card, .grupo-card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto 30px auto;
+}
+
+.grupo-titulo {
+    border-bottom: 2px solid var(--bg);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    color: var(--secondary);
+    font-size: 1.5rem;
+}
+
+.jogo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.placar-inputs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+input[type="number"], input[type="text"], input[type="password"], input[type="email"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 600;
+}
+
+.btn:hover {
+    background: var(--secondary);
+}

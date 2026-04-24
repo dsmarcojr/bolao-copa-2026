@@ -3,217 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolão Copa 2026 - Demonstração XP</title>
+    <title>Bolão Copa 2026 - Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #2e7d32;
-            --primary-light: #60ad5e;
-            --secondary: #1b5e20;
-            --bg: #f0f4f0;
-            --white: #ffffff;
-            --text: #333333;
-            --success: #155724;
-            --error: #c0392b;
-        }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        header h1 {
-            color: var(--primary);
-            font-size: 2.5rem;
-            margin-bottom: 5px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .card h2 {
-            color: var(--secondary);
-            margin-top: 0;
-            border-bottom: 2px solid var(--bg);
-            padding-bottom: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            outline: none;
-        }
-
-        input:focus {
-            border-color: var(--primary);
-        }
-
-        .result {
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: 600;
-            display: none;
-        }
-
-        .result.valid { background: #d4edda; color: var(--success); display: block; }
-        .result.invalid { background: #f8dbdb; color: var(--error); display: block; }
-
-        .badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 20px;
-            background: var(--primary);
-            color: white;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <h1>⚽ Bolão Copa 2026</h1>
-        <p>Demonstração dos Validadores (Desafio 1 - TDD)</p>
+        <div class="nav-container">
+            <a href="index.html" class="nav-btn">Início</a>
+            <a href="resultados.html" class="nav-btn">⚽ Resultados</a>
+            <a href="login.html" class="nav-btn">Login</a>
+            <a href="cadastro.html" class="nav-btn">Registrar</a>
+        </div>
     </header>
 
-    <div class="container">
-        <!-- Validador de Email -->
-        <div class="card">
-            <div class="badge">TDD - Teste #1</div>
-            <h2>Validador de Email</h2>
-            <div class="form-group">
-                <label>Digite um email:</label>
-                <input type="email" id="emailInput" placeholder="exemplo@email.com" oninput="validarEmail()">
-                <div id="emailResult" class="result"></div>
-            </div>
-        </div>
+    <div class="greeting">Bem-vindo ao Bolão Oficial da Copa 2026!</div>
 
-        <!-- Validador de CPF -->
-        <div class="card">
-            <div class="badge">TDD - Teste #2</div>
-            <h2>Validador de CPF</h2>
-            <div class="form-group">
-                <label>Digite o CPF (apenas números):</label>
-                <input type="text" id="cpfInput" placeholder="12345678909" maxlength="11" oninput="validarCPF()">
-                <div id="cpfResult" class="result"></div>
+    <div class="grupo-card">
+        <div class="grupo-titulo">Próximos Jogos</div>
+        <div class="jogo">
+            <span>Brasil</span>
+            <div class="placar-inputs">
+                <input type="number" value="2">
+                <span>X</span>
+                <input type="number" value="1">
             </div>
+            <span>Argentina</span>
+            <button class="nav-btn" style="padding: 5px 10px;">💾</button>
         </div>
-
-        <!-- Validador de Senha -->
-        <div class="card">
-            <div class="badge">TDD - Teste #3</div>
-            <h2>Validador de Senha Forte</h2>
-            <div class="form-group">
-                <label>Digite uma senha:</label>
-                <input type="password" id="senhaInput" placeholder="Mínimo 8 chars, 1 maiúscula, 1 número, 1 símbolo" oninput="validarSenha()">
-                <div id="senhaResult" class="result"></div>
+        <div class="jogo">
+            <span>França</span>
+            <div class="placar-inputs">
+                <input type="number" value="1">
+                <span>X</span>
+                <input type="number" value="1">
             </div>
+            <span>Espanha</span>
+            <button class="nav-btn" style="padding: 5px 10px;">💾</button>
         </div>
     </div>
 
-    <script>
-        function validarEmail() {
-            const email = document.getElementById('emailInput').value;
-            const res = document.getElementById('emailResult');
-            const padrao = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            
-            if (email === "") { res.className = "result"; return; }
-            
-            if (padrao.test(email)) {
-                res.innerText = "✅ Email Válido";
-                res.className = "result valid";
-            } else {
-                res.innerText = "❌ Email Inválido";
-                res.className = "result invalid";
-            }
-        }
-
-        function validarCPF() {
-            let cpf = document.getElementById('cpfInput').value.replace(/\D/g, '');
-            const res = document.getElementById('cpfResult');
-            
-            if (cpf === "") { res.className = "result"; return; }
-
-            const isValid = (c) => {
-                if (c.length !== 11 || /^(\d)\1+$/.test(c)) return false;
-                let soma = 0;
-                for (let i = 1; i <= 9; i++) soma += parseInt(c.substring(i-1, i)) * (11 - i);
-                let resto = (soma * 10) % 11;
-                if ((resto === 10) || (resto === 11)) resto = 0;
-                if (resto !== parseInt(c.substring(9, 10))) return false;
-                soma = 0;
-                for (let i = 1; i <= 10; i++) soma += parseInt(c.substring(i-1, i)) * (12 - i);
-                resto = (soma * 10) % 11;
-                if ((resto === 10) || (resto === 11)) resto = 0;
-                if (resto !== parseInt(c.substring(10, 11))) return false;
-                return true;
-            };
-
-            if (isValid(cpf)) {
-                res.innerText = "✅ CPF Válido";
-                res.className = "result valid";
-            } else {
-                res.innerText = "❌ CPF Inválido";
-                res.className = "result invalid";
-            }
-        }
-
-        function validarSenha() {
-            const senha = document.getElementById('senhaInput').value;
-            const res = document.getElementById('senhaResult');
-            
-            if (senha === "") { res.className = "result"; return; }
-
-            const forte = senha.length >= 8 && 
-                          /[A-Z]/.test(senha) && 
-                          /[a-z]/.test(senha) && 
-                          /[0-9]/.test(senha) && 
-                          /[^A-Za-z0-9]/.test(senha);
-
-            if (forte) {
-                res.innerText = "✅ Senha Forte";
-                res.className = "result valid";
-            } else {
-                res.innerText = "❌ Senha Fraca (Requisitos: 8+ chars, Maiúscula, Minúscula, Número, Símbolo)";
-                res.className = "result invalid";
-            }
-        }
-    </script>
+    <div class="grupo-card" style="background: #e8f5e9; border: 2px solid var(--primary);">
+        <div class="grupo-titulo">Validador TDD (Demonstração)</div>
+        <p>Use os campos abaixo para testar a lógica de TDD implementada no projeto.</p>
+        <div style="margin-bottom: 15px;">
+            <label>Email:</label>
+            <input type="email" placeholder="teste@exemplo.com" style="width: 100%;">
+        </div>
+        <div>
+            <label>Senha:</label>
+            <input type="password" placeholder="Senha Forte" style="width: 100%;">
+        </div>
+    </div>
 </body>
 </html>
