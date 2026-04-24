@@ -6,9 +6,10 @@ class TestDesafioTDD(unittest.TestCase):
     def test_email_valido(self):
         self.assertTrue(ehEmailValido("contato@giuliamarco.com.br"))
 
-    # Caso 2: Email inválido (sem @)
-    def test_email_sem_arroba(self):
+    # Caso 2: Email inválido (formato incorreto ou sem extensão)
+    def test_email_invalido(self):
         self.assertFalse(ehEmailValido("contatogiuliamarco.com.br"))
+        self.assertFalse(ehEmailValido("user@dominio"))
 
     # Caso 3: CPF válido (Algoritmo oficial)
     def test_cpf_valido(self):

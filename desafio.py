@@ -1,6 +1,7 @@
 import re
 
 def ehEmailValido(email):
+    # Regex rigorosa: exige @, domínio e extensão (ex: .com, .com.br)
     padrao = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     return bool(re.match(padrao, email))
 
