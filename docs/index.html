@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolão Copa 2026 - Login & Registro</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2e7d32">
-    <link rel="apple-touch-icon" href="assets/icon-192.png">
+    <title>Bolão Copa 2026 - Demonstração XP</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -17,308 +13,206 @@
             --bg: #f0f4f0;
             --white: #ffffff;
             --text: #333333;
+            --success: #155724;
+            --error: #c0392b;
         }
 
         body {
             font-family: 'Outfit', sans-serif;
-            background: url('assets/background.png') no-repeat center center fixed;
-            background-size: cover;
+            background: var(--bg);
             color: var(--text);
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             padding: 20px;
-            position: relative;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255, 255, 255, 0.2); /* Subtle light overlay */
-            z-index: -1;
-        }
-
-        .main-wrapper {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            gap: 30px;
-            width: 100%;
-            max-width: 900px;
+            align-items: center;
         }
 
-        .header {
+        header {
             text-align: center;
+            margin-bottom: 40px;
         }
 
-        .header h1 {
+        header h1 {
             color: var(--primary);
             font-size: 2.5rem;
             margin-bottom: 5px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-        .header p {
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        .forms-container {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
+        .container {
+            width: 100%;
+            max-width: 800px;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.95); /* Semi-transparent */
-            backdrop-filter: blur(10px);
+            background: white;
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            flex: 1;
-            min-width: 350px;
-            border: 1px solid rgba(255,255,255,0.3);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
 
         .card h2 {
             color: var(--secondary);
             margin-top: 0;
-            font-weight: 600;
             border-bottom: 2px solid var(--bg);
             padding-bottom: 10px;
-            margin-bottom: 25px;
         }
 
         .form-group {
             margin-bottom: 20px;
-            text-align: left;
         }
 
-        .form-group label {
+        label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 400;
-            color: #555;
-            font-size: 0.9rem;
+            font-weight: 600;
         }
 
         input {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
+            padding: 12px;
+            border: 2px solid #ddd;
             border-radius: 10px;
             font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s, box-shadow 0.3s;
             box-sizing: border-box;
-            background: #fafafa;
+            outline: none;
         }
 
         input:focus {
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(96, 173, 94, 0.1);
-            background: #fff;
+            border-color: var(--primary);
         }
 
-        button {
-            width: 100%;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
+        .result {
             margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: var(--secondary);
-            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-
-        .btn-outline:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .footer-links {
-            margin-top: 40px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            width: 100%;
-        }
-
-        .footer-links a {
-            text-decoration: none;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(5px);
-            color: var(--secondary);
+            padding: 10px;
+            border-radius: 8px;
             font-weight: 600;
-            font-size: 1.1rem;
-            padding: 15px 30px;
-            border-radius: 12px;
-            border: 2px solid var(--primary);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: none;
         }
 
-        .footer-links a:hover {
+        .result.valid { background: #d4edda; color: var(--success); display: block; }
+        .result.invalid { background: #f8dbdb; color: var(--error); display: block; }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
             background: var(--primary);
             color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
-        }
-
-        @media (max-width: 768px) {
-            .forms-container {
-                flex-direction: column;
-            }
-            .card {
-                min-width: 100%;
-            }
+            font-size: 0.8rem;
+            margin-bottom: 10px;
         }
     </style>
 </head>
-
 <body>
-    <div class="main-wrapper">
-        <div class="header">
-            <h1 style="font-size: 4rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px var(--primary), 0 0 20px #8b5cf6, 0 0 30px #d946ef; margin-bottom: 0;">BOLÃO COPA 2026</h1>
-            <p>Sua chance de mostrar que entende de futebol!</p>
-        </div>
+    <header>
+        <h1>⚽ Bolão Copa 2026</h1>
+        <p>Demonstração dos Validadores (Desafio 1 - TDD)</p>
+    </header>
 
-        <div class="forms-container">
-            <!-- Login Card -->
-            <div class="card" id="login-card">
-                <h2>Já tenho conta</h2>
-                <form id="login-form">
-                    <div class="form-group">
-                        <label for="login-user">Usuário ou E-mail</label>
-                        <input type="text" id="login-user" placeholder="Ex: joao.silva ou joao.silva@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="login-pass">Senha</label>
-                        <input type="password" id="login-pass" placeholder="••••••••" required>
-                    </div>
-                    <button type="submit">Entrar no Sistema</button>
-                </form>
-            </div>
-
-            <!-- Register Card -->
-            <div class="card" id="register-card">
-                <h2>Criar nova conta</h2>
-                <form id="register-form">
-                    <div class="form-group">
-                        <label for="reg-nome">Nome Completo</label>
-                        <input type="text" id="reg-nome" placeholder="Seu nome" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-email">E-mail</label>
-                        <input type="email" id="reg-email" placeholder="seu@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-pass">Sua Senha</label>
-                        <input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres" required>
-                    </div>
-                    <button type="submit" class="btn-outline">Registrar e Participar</button>
-                </form>
+    <div class="container">
+        <!-- Validador de Email -->
+        <div class="card">
+            <div class="badge">TDD - Teste #1</div>
+            <h2>Validador de Email</h2>
+            <div class="form-group">
+                <label>Digite um email:</label>
+                <input type="email" id="emailInput" placeholder="exemplo@email.com" oninput="validarEmail()">
+                <div id="emailResult" class="result"></div>
             </div>
         </div>
 
-        <div class="footer-links">
-            <a href="classificacao.html">🏆 Ver Classificação</a>
-            <a href="resultados.html">⚽ Resultados Oficiais</a>
+        <!-- Validador de CPF -->
+        <div class="card">
+            <div class="badge">TDD - Teste #2</div>
+            <h2>Validador de CPF</h2>
+            <div class="form-group">
+                <label>Digite o CPF (apenas números):</label>
+                <input type="text" id="cpfInput" placeholder="12345678909" maxlength="11" oninput="validarCPF()">
+                <div id="cpfResult" class="result"></div>
+            </div>
+        </div>
+
+        <!-- Validador de Senha -->
+        <div class="card">
+            <div class="badge">TDD - Teste #3</div>
+            <h2>Validador de Senha Forte</h2>
+            <div class="form-group">
+                <label>Digite uma senha:</label>
+                <input type="password" id="senhaInput" placeholder="Mínimo 8 chars, 1 maiúscula, 1 número, 1 símbolo" oninput="validarSenha()">
+                <div id="senhaResult" class="result"></div>
+            </div>
         </div>
     </div>
 
     <script>
-        const API_URL = 'http://127.0.0.1:5000';
-
-        // Lógica de Login
-        document.getElementById('login-form').addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const userInput = document.getElementById('login-user').value.trim();
-            const pass = document.getElementById('login-pass').value;
-
-            try {
-                const response = await fetch(`${API_URL}/api/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ login: userInput, senha: pass })
-                });
-                
-                const data = await response.json();
-                if (response.ok) {
-                    localStorage.setItem('usuario_logado', data.usuario);
-                    alert(`Bem-vindo de volta, ${data.nome}! Redirecionando para seus palpites...`);
-                    window.location.href = 'palpites.html';
-                } else {
-                    alert('Erro: ' + (data.message || 'Usuário e/ou senha incorretos ou não existem.'));
-                }
-            } catch (err) {
-                alert('Erro ao conectar com o servidor. O backend (app.py) está rodando em http://127.0.0.1:5000?');
+        function validarEmail() {
+            const email = document.getElementById('emailInput').value;
+            const res = document.getElementById('emailResult');
+            const padrao = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            
+            if (email === "") { res.className = "result"; return; }
+            
+            if (padrao.test(email)) {
+                res.innerText = "✅ Email Válido";
+                res.className = "result valid";
+            } else {
+                res.innerText = "❌ Email Inválido";
+                res.className = "result invalid";
             }
-        });
+        }
 
-        // Lógica de Registro
-        document.getElementById('register-form').addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const nome = document.getElementById('reg-nome').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const pass = document.getElementById('reg-pass').value;
+        function validarCPF() {
+            let cpf = document.getElementById('cpfInput').value.replace(/\D/g, '');
+            const res = document.getElementById('cpfResult');
+            
+            if (cpf === "") { res.className = "result"; return; }
 
-            if (!email.includes('@')) {
-                alert('Erro: Por favor, insira um e-mail válido contendo "@".');
-                return;
+            const isValid = (c) => {
+                if (c.length !== 11 || /^(\d)\1+$/.test(c)) return false;
+                let soma = 0;
+                for (let i = 1; i <= 9; i++) soma += parseInt(c.substring(i-1, i)) * (11 - i);
+                let resto = (soma * 10) % 11;
+                if ((resto === 10) || (resto === 11)) resto = 0;
+                if (resto !== parseInt(c.substring(9, 10))) return false;
+                soma = 0;
+                for (let i = 1; i <= 10; i++) soma += parseInt(c.substring(i-1, i)) * (12 - i);
+                resto = (soma * 10) % 11;
+                if ((resto === 10) || (resto === 11)) resto = 0;
+                if (resto !== parseInt(c.substring(10, 11))) return false;
+                return true;
+            };
+
+            if (isValid(cpf)) {
+                res.innerText = "✅ CPF Válido";
+                res.className = "result valid";
+            } else {
+                res.innerText = "❌ CPF Inválido";
+                res.className = "result invalid";
             }
+        }
 
-            try {
-                const response = await fetch(`${API_URL}/api/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nome: nome, email: email, senha: pass })
-                });
-                
-                const data = await response.json();
-                if (response.ok) {
-                    alert(`Usuário ${nome} registrado com sucesso!\nSeu login será: ${data.usuario}`);
-                    localStorage.setItem('usuario_logado', data.usuario);
-                    window.location.href = 'palpites.html';
-                } else {
-                    alert('Erro no registro: ' + (data.message || 'Problema ao criar a conta.'));
-                }
-            } catch (err) {
-                alert('Erro ao conectar com o servidor. O backend (app.py) está rodando em http://127.0.0.1:5000?');
+        function validarSenha() {
+            const senha = document.getElementById('senhaInput').value;
+            const res = document.getElementById('senhaResult');
+            
+            if (senha === "") { res.className = "result"; return; }
+
+            const forte = senha.length >= 8 && 
+                          /[A-Z]/.test(senha) && 
+                          /[0-9]/.test(senha) && 
+                          /[^A-Za-z0-9]/.test(senha);
+
+            if (forte) {
+                res.innerText = "✅ Senha Forte";
+                res.className = "result valid";
+            } else {
+                res.innerText = "❌ Senha Fraca (Requisitos: 8+ chars, 1 Maiúscula, 1 Número, 1 Símbolo)";
+                res.className = "result invalid";
             }
-        });
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-            .then(() => console.log('Service Worker Registrado'))
-            .catch(err => console.error('Erro no Service Worker', err));
         }
     </script>
 </body>
-
-</html>
+</html>
