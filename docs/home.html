@@ -3,55 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolão Copa 2026 - Home</title>
+    <title>Bolão Copa 2026 - Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .score-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 0 auto 2rem auto;
+            border-left: 5px solid var(--primary);
+            max-width: 800px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .score-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        .score-label { font-size: 1.2rem; color: #888; font-weight: normal; }
+        
+        .jogo-result {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            border-bottom: 1px solid #f2f2f2;
+            position: relative;
+        }
+        .equipe { width: 35%; font-weight: 600; }
+        .placar-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f9f9f9;
+            padding: 10px 20px;
+            border-radius: 12px;
+        }
+        .gol-box {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .tag-real {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            background: #eee;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>⚽ Bolão Copa 2026</h1>
+        <div class="greeting">Bem-vindo(a), <strong>Giulia e Marco</strong>!</div>
         <div class="nav-container">
             <a href="home.html" class="nav-btn">Início</a>
             <a href="index.html" class="nav-btn" style="color: #c0392b; border-color: #c0392b;">Sair</a>
         </div>
     </header>
 
-    <div class="greeting">Bem-vindo ao Bolão Oficial da Copa 2026!</div>
+    <div class="score-card">
+        <h3 style="margin-bottom: 0.5rem; color: #555;">Sua Pontuação até o momento</h3>
+        <div class="score-value">85 <span class="score-label">pts</span></div>
+    </div>
 
     <div class="grupo-card">
         <div class="grupo-titulo">Próximos Jogos</div>
         <div class="jogo">
-            <span>Brasil</span>
+            <div class="equipe">Brasil</div>
+            <div class="placar-inputs">
+                <input type="number" value="3">
+                <span>X</span>
+                <input type="number" value="0">
+            </div>
+            <div class="equipe" style="text-align: right;">Croácia</div>
+            <button class="nav-btn" style="padding: 5px 10px; margin-left: 15px;">💾</button>
+        </div>
+        <div class="jogo">
+            <div class="equipe">França</div>
             <div class="placar-inputs">
                 <input type="number" value="2">
                 <span>X</span>
                 <input type="number" value="1">
             </div>
-            <span>Argentina</span>
-            <button class="nav-btn" style="padding: 5px 10px;">💾</button>
-        </div>
-        <div class="jogo">
-            <span>França</span>
-            <div class="placar-inputs">
-                <input type="number" value="1">
-                <span>X</span>
-                <input type="number" value="1">
-            </div>
-            <span>Espanha</span>
-            <button class="nav-btn" style="padding: 5px 10px;">💾</button>
+            <div class="equipe" style="text-align: right;">Marrocos</div>
+            <button class="nav-btn" style="padding: 5px 10px; margin-left: 15px;">💾</button>
         </div>
     </div>
 
-    <div class="grupo-card" style="background: #e8f5e9; border: 2px solid var(--primary);">
-        <div class="grupo-titulo">Validador TDD (Demonstração)</div>
-        <p>Use os campos abaixo para testar a lógica de TDD implementada no projeto.</p>
-        <div style="margin-bottom: 15px;">
-            <label>Email:</label>
-            <input type="email" placeholder="teste@exemplo.com" style="width: 100%;">
+    <div class="grupo-card">
+        <div class="grupo-titulo">Últimos Palpites Realizados</div>
+        <div class="jogo-result">
+            <div class="equipe">Argentina</div>
+            <div class="placar-display">
+                <div class="gol-box">2</div>
+                <span>X</span>
+                <div class="gol-box">1</div>
+            </div>
+            <div class="equipe" style="text-align: right;">Holanda</div>
+            <div class="tag-real">Resultado Real: 2 x 1 (+25 pts!)</div>
         </div>
-        <div>
-            <label>Senha:</label>
-            <input type="password" placeholder="Senha Forte" style="width: 100%;">
+        <div class="jogo-result">
+            <div class="equipe">Inglaterra</div>
+            <div class="placar-display">
+                <div class="gol-box">1</div>
+                <span>X</span>
+                <div class="gol-box">0</div>
+            </div>
+            <div class="equipe" style="text-align: right;">Senegal</div>
+            <div class="tag-real">Resultado Real: 3 x 0 (+10 pts)</div>
         </div>
     </div>
 </body>
