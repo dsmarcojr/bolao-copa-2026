@@ -22,9 +22,10 @@ def ehCPFValido(cpf):
 def ehSenhaForte(senha):
     if len(senha) < 8: return False
     tem_maiuscula = any(c.isupper() for c in senha)
+    tem_minuscula = any(c.islower() for c in senha)
     tem_numero = any(c.isdigit() for c in senha)
     tem_simbolo = any(not c.isalnum() for c in senha)
-    return tem_maiuscula and tem_numero and tem_simbolo
+    return tem_maiuscula and tem_minuscula and tem_numero and tem_simbolo
 
 def calcular_pontos(gols_real, gols_palpite):
     """

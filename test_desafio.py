@@ -18,9 +18,12 @@ class TestDesafioTDD(unittest.TestCase):
     def test_cpf_repetido(self):
         self.assertFalse(ehCPFValido("00000000000"))
 
-    # Caso 5: Senha forte (Mínimo 8 caracteres, letra maiúscula, número e símbolo)
+    # Caso 5: Senha forte (8+ chars, Maiúscula, Minúscula, Número e Símbolo)
     def test_senha_forte(self):
         self.assertTrue(ehSenhaForte("Brasil@2026"))
+
+    def test_senha_sem_minuscula(self):
+        self.assertFalse(ehSenhaForte("BRASIL@2026"))
 
 class TestBolaoXP(unittest.TestCase):
 

@@ -202,6 +202,7 @@
 
             const forte = senha.length >= 8 && 
                           /[A-Z]/.test(senha) && 
+                          /[a-z]/.test(senha) && 
                           /[0-9]/.test(senha) && 
                           /[^A-Za-z0-9]/.test(senha);
 
@@ -209,7 +210,7 @@
                 res.innerText = "✅ Senha Forte";
                 res.className = "result valid";
             } else {
-                res.innerText = "❌ Senha Fraca (Requisitos: 8+ chars, 1 Maiúscula, 1 Número, 1 Símbolo)";
+                res.innerText = "❌ Senha Fraca (Requisitos: 8+ chars, Maiúscula, Minúscula, Número, Símbolo)";
                 res.className = "result invalid";
             }
         }
