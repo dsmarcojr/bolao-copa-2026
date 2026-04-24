@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolão Copa 2026 - Home</title>
+    <title>Bolão Copa 2026 - Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,50 +11,28 @@
     <header>
         <h1>⚽ Bolão Copa 2026</h1>
         <div class="nav-container">
-            <a href="index.html" class="nav-btn">Início</a>
-            <a href="resultados.html" class="nav-btn">⚽ Resultados</a>
-            <a href="login.html" class="nav-btn">Login</a>
+            <a href="index.html" class="nav-btn">Login</a>
             <a href="cadastro.html" class="nav-btn">Registrar</a>
         </div>
     </header>
 
-    <div class="greeting">Bem-vindo ao Bolão Oficial da Copa 2026!</div>
-
-    <div class="grupo-card">
-        <div class="grupo-titulo">Próximos Jogos</div>
-        <div class="jogo">
-            <span>Brasil</span>
-            <div class="placar-inputs">
-                <input type="number" value="2">
-                <span>X</span>
-                <input type="number" value="1">
+    <div class="card" style="max-width: 400px; margin-top: 50px;">
+        <h2>Entrar no Bolão</h2>
+        <form>
+            <div style="margin-bottom: 15px;">
+                <label>Email</label>
+                <input type="email" placeholder="Seu email" style="width: 100%;">
             </div>
-            <span>Argentina</span>
-            <button class="nav-btn" style="padding: 5px 10px;">💾</button>
-        </div>
-        <div class="jogo">
-            <span>França</span>
-            <div class="placar-inputs">
-                <input type="number" value="1">
-                <span>X</span>
-                <input type="number" value="1">
+            <div style="margin-bottom: 20px;">
+                <label>Senha</label>
+                <input type="password" placeholder="Sua senha" style="width: 100%;">
             </div>
-            <span>Espanha</span>
-            <button class="nav-btn" style="padding: 5px 10px;">💾</button>
-        </div>
-    </div>
-
-    <div class="grupo-card" style="background: #e8f5e9; border: 2px solid var(--primary);">
-        <div class="grupo-titulo">Validador TDD (Demonstração)</div>
-        <p>Use os campos abaixo para testar a lógica de TDD implementada no projeto.</p>
-        <div style="margin-bottom: 15px;">
-            <label>Email:</label>
-            <input type="email" placeholder="teste@exemplo.com" style="width: 100%;">
-        </div>
-        <div>
-            <label>Senha:</label>
-            <input type="password" placeholder="Senha Forte" style="width: 100%;">
-        </div>
+            <!-- Ao clicar em Entrar, vai para a página principal (home.html) -->
+            <button type="button" class="btn" onclick="window.location.href='home.html'">Entrar</button>
+        </form>
+        <p style="text-align: center; margin-top: 20px;">
+            Não tem conta? <a href="cadastro.html" style="color: var(--primary);">Cadastre-se</a>
+        </p>
     </div>
 </body>
 </html>
